@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringRunner
 
-@ContextConfiguration(classes = [ExampleTestConfig::class])
+@ContextConfiguration(classes = [InventarioServiceTestConfig::class])
 @DataJpaTest
 @RunWith(SpringRunner::class)
 class InventarioServiceTest {
@@ -71,10 +71,10 @@ class InventarioServiceTest {
 
     @Test
     fun testGetMasPesados() {
-        val items = service.getMasPesdos(10)
+        val items = service.getMasPesados(10)
         Assert.assertEquals(2, items.size.toLong())
 
-        val items2 = service.getMasPesdos(80)
+        val items2 = service.getMasPesados(80)
         Assert.assertEquals(1, items2.size.toLong())
     }
 

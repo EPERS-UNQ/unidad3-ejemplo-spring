@@ -1,4 +1,4 @@
-package ar.edu.unq.spring
+package ar.edu.unq.spring.persistence
 
 import ar.edu.unq.spring.modelo.Item
 import org.springframework.data.jpa.repository.JpaRepository

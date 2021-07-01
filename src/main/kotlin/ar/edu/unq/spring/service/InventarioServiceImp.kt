@@ -1,7 +1,7 @@
 package ar.edu.unq.spring.service
 
-import ar.edu.unq.spring.ItemDAO
-import ar.edu.unq.spring.PersonajeDAO
+import ar.edu.unq.spring.persistence.ItemDAO
+import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 import org.springframework.data.repository.findByIdOrNull
@@ -42,7 +42,7 @@ class InventarioServiceImp(
         personaje?.let { p -> personajeDAO.save(p) }
     }
 
-    override fun getMasPesdos(peso: Int): Collection<Item> {
+    override fun getMasPesados(peso: Int): Collection<Item> {
         return itemDAO.getMasPesados(peso)
     }
 

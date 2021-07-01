@@ -1,5 +1,7 @@
 package ar.edu.unq.spring
 
+import ar.edu.unq.spring.persistence.ItemDAO
+import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.service.InventarioService
 import ar.edu.unq.spring.service.InventarioServiceImp
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @EnableJpaRepositories
 @EnableAutoConfiguration
 
-class ExampleTestConfig {
+class InventarioServiceTestConfig {
 
     @Autowired
     lateinit var personajeDAO: PersonajeDAO
