@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 /* IMPORTANTE: En este service estamos manejando tanto personajes como items solo a modo de ejemplo.
 * Recuerden que es importante dividir responsabilidades bien en nuestros objetos.
 * Este controller deberia estar dividido en un personaje controller, y en un inventario controller */
+@RestController
 @CrossOrigin
 @RequestMapping("/inventario")
 class InventarioControllerREST(private val inventarioService: InventarioService) {
@@ -19,6 +20,9 @@ class InventarioControllerREST(private val inventarioService: InventarioService)
 
     @GetMapping("/allItems")
     fun allItems() = inventarioService.allItems().map { item -> ItemDTO.desdeModelo(item)  }
+
+    @GetMapping("/allPersonajes")
+    fun allPersonajes() = inventarioService.allPersonajes().map { personaje -> PersonajeDTO.desdeModelo(personaje)  }
 
     @GetMapping("/heaviestItem")
     fun heaviestItem() = ItemDTO.desdeModelo(inventarioService.heaviestItem())
@@ -32,7 +36,7 @@ class InventarioControllerREST(private val inventarioService: InventarioService)
     @PostMapping
     fun guardarItem(@RequestBody item: ItemDTO) = inventarioService.guardarItem(item.aModelo())
 
-    @PostMapping
+    @PostMapping("/personaje")
     fun guardarPersonaje(@RequestBody personaje: PersonajeDTO) = inventarioService.guardarPersonaje(personaje.aModelo())
 
     @PutMapping("/recoger/{personajeId}/{itemId}")

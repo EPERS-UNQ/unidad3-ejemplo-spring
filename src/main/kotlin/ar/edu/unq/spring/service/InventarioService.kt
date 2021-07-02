@@ -8,6 +8,7 @@ import ar.edu.unq.spring.modelo.Personaje
 * Este servicio deberia estar dividido en un personaje service, y en un inventario service */
 interface InventarioService {
     fun allItems(): Collection<Item>
+    fun allPersonajes(): Collection<Personaje>
     fun heaviestItem(): Item
     fun guardarItem(item: Item)
     fun guardarPersonaje(personaje: Personaje)

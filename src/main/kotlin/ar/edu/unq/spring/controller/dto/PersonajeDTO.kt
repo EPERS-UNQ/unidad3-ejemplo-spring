@@ -12,7 +12,7 @@ class PersonajeDTO(
     val nombre: String?,
     val vida: Int,
     val pesoMaximo: Int,
-    val inventario: MutableSet<ItemDTO>
+    val inventario: MutableSet<ItemDTO>?
 ) {
     companion object {
         fun desdeModelo(personaje: Personaje) =
@@ -34,9 +34,10 @@ class PersonajeDTO(
         personaje.nombre = this.nombre
         personaje.vida = this.vida
         personaje.pesoMaximo = this.pesoMaximo
-        personaje.inventario = this.inventario
-            .map { itemDTO  -> itemDTO.aModelo(personaje) }
-            .toCollection(HashSet())
+        personaje.inventario = this.inventario?.
+            map { itemDTO  -> itemDTO.aModelo(personaje) }?.
+            toCollection(HashSet())
+            ?: HashSet()
         return personaje
     }
 }

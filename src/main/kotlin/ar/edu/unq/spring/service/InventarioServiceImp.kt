@@ -19,6 +19,10 @@ class InventarioServiceImp(
         return itemDAO.findAll()
     }
 
+    override fun allPersonajes(): Collection<Personaje> {
+        return personajeDAO.findAll()
+    }
+
     override fun heaviestItem(): Item {
         return itemDAO.findTopByOrderByPesoDesc()
     }
