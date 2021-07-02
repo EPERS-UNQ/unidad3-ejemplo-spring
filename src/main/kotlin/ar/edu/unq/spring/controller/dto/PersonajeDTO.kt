@@ -2,11 +2,6 @@ package ar.edu.unq.spring.controller.dto
 
 import ar.edu.unq.spring.modelo.Personaje
 
-// Si bien en este caso realmente no haria falta un DTO, ya que
-// la estructura del modelo matchea 1 a 1 a la estructura del DTO,
-// aun asi es buena practica tener el DTO listo
-// a modo de establecer una convencion en tu proyecto
-
 class PersonajeDTO(
     val id: Long?,
     val nombre: String?,
