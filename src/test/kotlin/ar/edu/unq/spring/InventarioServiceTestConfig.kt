@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @Configuration
 @EnableJpaRepositories
 @EnableAutoConfiguration
-
 class InventarioServiceTestConfig {
 
     @Autowired
