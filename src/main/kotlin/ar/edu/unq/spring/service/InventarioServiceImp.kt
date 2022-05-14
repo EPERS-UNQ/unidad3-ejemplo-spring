@@ -54,5 +54,10 @@ class InventarioServiceImp(
         return itemDAO.getItemsDePersonajesDebiles(vida)
     }
 
+    override fun clearAll() {
+        itemDAO.deleteAll()
+        personajeDAO.deleteAll()
+    }
+
 
 }

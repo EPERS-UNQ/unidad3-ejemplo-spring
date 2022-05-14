@@ -1,51 +1,50 @@
-package ar.edu.unq.spring
+package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
-import ar.edu.unq.spring.service.InventarioService
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import ar.edu.unq.spring.persistence.ItemDAO
+import ar.edu.unq.spring.persistence.PersonajeDAO
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@ContextConfiguration(classes = [InventarioServiceTestConfig::class])
 @ExtendWith(SpringExtension::class)
-@DataJpaTest
+@SpringBootTest
 @TestInstance(PER_CLASS)
 class InventarioServiceTest {
+
+    @Autowired
+    lateinit var personajeDAO: PersonajeDAO
+    @Autowired
+    lateinit var itemDAO: ItemDAO
 
     lateinit var maguin: Personaje
     lateinit var debilucho: Personaje
     lateinit var baculo: Item
     lateinit var tunica: Item
 
-    @Autowired
     lateinit var service: InventarioService
-
-    @BeforeAll
+    @BeforeEach
     fun prepare() {
+        service = InventarioServiceImp(personajeDAO, itemDAO)
 
         tunica = Item("Tunica", 100)
         baculo = Item("Baculo", 50)
 
-        service.guardarItem(tunica)
-        service.guardarItem(baculo)
-
         maguin = Personaje("Maguin")
         maguin.pesoMaximo = 70
         maguin.vida = 10
-        service.guardarPersonaje(maguin)
-
 
         debilucho = Personaje("Debilucho")
         debilucho.pesoMaximo = 1000
         debilucho.vida = 1
+
+        service.guardarItem(tunica)
+        service.guardarItem(baculo)
+        service.guardarPersonaje(maguin)
         service.guardarPersonaje(debilucho)
     }
 
@@ -99,5 +98,10 @@ class InventarioServiceTest {
     fun testGetMasPesado() {
         val item = service.heaviestItem()
         Assertions.assertEquals("Tunica", item.nombre)
+    }
+
+    @AfterEach
+    fun tearDown() {
+       service.clearAll()
     }
 }

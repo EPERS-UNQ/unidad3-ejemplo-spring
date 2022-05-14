@@ -16,4 +16,5 @@ interface InventarioService {
     fun recoger(personajeId: Long?, itemId: Long?)
     fun getMasPesados(peso: Int): Collection<Item>
     fun getItemsPersonajesDebiles(vida: Int): Collection<Item>
+    fun clearAll()
 }
