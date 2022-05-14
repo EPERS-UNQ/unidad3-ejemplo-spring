@@ -50,9 +50,9 @@ class InventarioServiceTest {
 
     @Test
     fun testRecoger() {
-        service.recoger(maguin.id, baculo.id)
+        service.recoger(maguin.id!!, baculo.id!!)
 
-        val maguito = service.recuperarPersonaje(maguin.id)
+        val maguito = service.recuperarPersonaje(maguin.id!!)
         Assertions.assertEquals("Maguin", maguito?.nombre)
 
         Assertions.assertEquals(1, maguito?.inventario?.size)
@@ -85,8 +85,8 @@ class InventarioServiceTest {
         var items = service.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(0, items.size.toLong())
 
-        service.recoger(maguin.id, baculo.id)
-        service.recoger(debilucho.id, tunica.id)
+        service.recoger(maguin.id!!, baculo.id!!)
+        service.recoger(debilucho.id!!, tunica.id!!)
 
         items = service.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(1, items.size.toLong())

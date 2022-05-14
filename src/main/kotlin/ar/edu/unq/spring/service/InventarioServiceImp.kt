@@ -1,9 +1,9 @@
 package ar.edu.unq.spring.service
 
-import ar.edu.unq.spring.persistence.ItemDAO
-import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.persistence.ItemDAO
+import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -16,11 +16,11 @@ class InventarioServiceImp(
 ) : InventarioService {
 
     override fun allItems(): Collection<Item> {
-        return itemDAO.findAll()
+        return itemDAO.findAll().toMutableSet()
     }
 
     override fun allPersonajes(): Collection<Personaje> {
-        return personajeDAO.findAll()
+        return personajeDAO.findAll().toMutableSet()
     }
 
     override fun heaviestItem(): Item {
@@ -35,11 +35,11 @@ class InventarioServiceImp(
         personajeDAO.save(personaje)
     }
 
-    override fun recuperarPersonaje(personajeId: Long?): Personaje? {
+    override fun recuperarPersonaje(personajeId: Long): Personaje? {
         return personajeDAO.findByIdOrNull(personajeId)
     }
 
-    override fun recoger(personajeId: Long?, itemId: Long?) {
+    override fun recoger(personajeId: Long, itemId: Long) {
         val personaje = personajeDAO.findByIdOrNull(personajeId)
         val item = itemDAO.findByIdOrNull(itemId)
         item?.let { i -> personaje?.recoger(i) }

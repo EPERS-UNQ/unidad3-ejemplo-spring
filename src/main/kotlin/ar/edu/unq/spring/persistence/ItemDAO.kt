@@ -1,10 +1,10 @@
 package ar.edu.unq.spring.persistence
 
 import ar.edu.unq.spring.modelo.Item
-import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.CrudRepository
 
-interface ItemDAO : JpaRepository<Item, Long> {
+interface ItemDAO : CrudRepository<Item, Long> {
 
     fun findTopByOrderByPesoDesc(): Item
 
