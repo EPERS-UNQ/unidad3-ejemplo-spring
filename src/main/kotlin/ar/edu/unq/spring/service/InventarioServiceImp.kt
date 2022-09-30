@@ -4,16 +4,17 @@ import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class InventarioServiceImp(
-    private val personajeDAO: PersonajeDAO,
-    private val itemDAO: ItemDAO
-) : InventarioService {
+class InventarioServiceImp() : InventarioService {
+
+    @Autowired private lateinit var personajeDAO: PersonajeDAO
+    @Autowired private lateinit var itemDAO: ItemDAO
 
     override fun allItems(): Collection<Item> {
         return itemDAO.findAll().toMutableSet()
