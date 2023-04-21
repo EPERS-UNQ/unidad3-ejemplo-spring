@@ -20,17 +20,16 @@ class InventarioServiceTest {
     lateinit var personajeDAO: PersonajeDAO
     @Autowired
     lateinit var itemDAO: ItemDAO
+    @Autowired
+    lateinit var service: InventarioService
 
     lateinit var maguin: Personaje
     lateinit var debilucho: Personaje
     lateinit var baculo: Item
     lateinit var tunica: Item
 
-    lateinit var service: InventarioService
     @BeforeEach
     fun prepare() {
-        service = InventarioServiceImp(personajeDAO, itemDAO)
-
         tunica = Item("Tunica", 100)
         baculo = Item("Baculo", 50)
 
