@@ -1,21 +1,15 @@
 package ar.edu.unq.spring.modelo
 
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException
-import javax.persistence.*
 import kotlin.collections.HashSet
 
-@Entity
 class Personaje() {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    @Column(nullable = false, length = 500)
     var nombre: String? = null
     var vida: Int = 0
     var pesoMaximo: Int = 0
 
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var inventario: MutableSet<Item> = HashSet()
 
     val pesoActual: Int

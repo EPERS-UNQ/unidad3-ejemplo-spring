@@ -2,6 +2,8 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.persistence.ItemJPADTO
+import ar.edu.unq.spring.persistence.PersonajeJPADTO
 
 /* IMPORTANTE: En este service estamos manejando tanto personajes como items solo a modo de ejemplo.
 * Recuerden que es importante dividir responsabilidades bien en nuestros objetos.

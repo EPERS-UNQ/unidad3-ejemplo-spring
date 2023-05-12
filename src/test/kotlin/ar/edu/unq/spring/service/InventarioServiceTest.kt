@@ -2,8 +2,6 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
-import ar.edu.unq.spring.persistence.ItemDAO
-import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,10 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @TestInstance(PER_CLASS)
 class InventarioServiceTest {
 
-    @Autowired
-    lateinit var personajeDAO: PersonajeDAO
-    @Autowired
-    lateinit var itemDAO: ItemDAO
     @Autowired
     lateinit var service: InventarioService
 
@@ -50,7 +44,6 @@ class InventarioServiceTest {
     @Test
     fun testRecoger() {
         service.recoger(maguin.id!!, baculo.id!!)
-
         val maguito = service.recuperarPersonaje(maguin.id!!)
         Assertions.assertEquals("Maguin", maguito?.nombre)
 

@@ -3,14 +3,14 @@ package ar.edu.unq.spring.controller.dto
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 
-class ItemDTO (val id: Long?,
-               val nombre : String?,
-               val peso: Int,
-               val ownerId: Long?){
+class ItemJsonDTO (val id: Long?,
+                   val nombre : String?,
+                   val peso: Int,
+                   val ownerId: Long?){
 
     companion object {
         fun desdeModelo(item: Item) =
-            ItemDTO (
+            ItemJsonDTO (
                 id = item.id,
                 nombre = item.nombre,
                 peso = item.peso,

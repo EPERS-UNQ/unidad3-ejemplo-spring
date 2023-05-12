@@ -2,22 +2,22 @@ package ar.edu.unq.spring.controller.dto
 
 import ar.edu.unq.spring.modelo.Personaje
 
-class PersonajeDTO(
+class PersonajeJsonDTO(
     val id: Long?,
     val nombre: String?,
     val vida: Int,
     val pesoMaximo: Int,
-    val inventario: MutableSet<ItemDTO>?
+    val inventario: MutableSet<ItemJsonDTO>?
 ) {
     companion object {
         fun desdeModelo(personaje: Personaje) =
-            PersonajeDTO(
+            PersonajeJsonDTO(
                 id = personaje.id,
                 nombre = personaje.nombre,
                 vida = personaje.vida,
                 pesoMaximo = personaje.pesoMaximo,
                 inventario = personaje.inventario
-                    .map { item -> ItemDTO.desdeModelo(item) }
+                    .map { item -> ItemJsonDTO.desdeModelo(item) }
                     .toCollection(HashSet())
             )
     }
