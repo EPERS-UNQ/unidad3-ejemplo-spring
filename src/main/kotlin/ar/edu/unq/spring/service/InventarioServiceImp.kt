@@ -6,6 +6,7 @@ import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.ItemJPADTO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.persistence.PersonajeJPADTO
+import ar.edu.unq.spring.persistence.PersonajeJPADTO.Companion.desdeModelo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -30,19 +31,21 @@ class InventarioServiceImp() : InventarioService {
         return itemDAO.findTopByOrderByPesoDesc().aModelo()
     }
 
-    override fun guardarItem(item: Item) {
-        val itemJPADTO = ItemJPADTO(item)
+    override fun guardarItem(item: Item): Long {
+        val itemJPADTO = ItemJPADTO.desdeModelo(item)
         itemDAO.save(itemJPADTO)
         item.id = itemJPADTO.id
+        return item.id!!
     }
 
-    override fun guardarPersonaje(personaje: Personaje) {
-        val personajeJPADTO = PersonajeJPADTO(personaje)
+    override fun guardarPersonaje(personaje: Personaje): Long {
+        val personajeJPADTO = desdeModelo(personaje)
         personajeDAO.save(personajeJPADTO)
         personaje.id = personajeJPADTO.id
+        return personaje.id!!
     }
 
-    override fun recuperarPersonaje(personajeId: Long): Personaje? {
+    override fun recuperarPersonaje(personajeId: Long): Personaje {
         return personajeDAO.findByIdOrNull(personajeId)!!.aModelo()
     }
 
@@ -50,7 +53,7 @@ class InventarioServiceImp() : InventarioService {
         val personaje = personajeDAO.findByIdOrNull(personajeId)!!.aModelo()
         val item = itemDAO.findByIdOrNull(itemId)!!.aModelo()
         item?.let { i -> personaje?.recoger(i) }
-        personaje?.let { p -> personajeDAO.save(PersonajeJPADTO(p)) }
+        personaje?.let { p -> personajeDAO.save(desdeModelo(p)) }
     }
 
     override fun getMasPesados(peso: Int): Collection<Item> {

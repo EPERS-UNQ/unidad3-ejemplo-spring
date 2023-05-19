@@ -17,25 +17,29 @@ class ItemJPADTO() {
     @ManyToOne
     var owner: PersonajeJPADTO? = null
 
-    constructor(item: Item) : this() {
-        this.id = item.id
-        this.nombre = item.nombre
-        this.peso = item.peso
-        if (item.owner != null && this.owner != null) {
-            this.owner = PersonajeJPADTO(item.owner!!)
+    //En esta clase tenemos dos desdeModelos y dos aModelo
+    //para evitar problemas de recursion a la hora de transformar aModelo o desdeModelo
+
+    companion object {
+        fun desdeModelo(item: Item): ItemJPADTO{
+            val dto = ItemJPADTO()
+            dto.id = item.id
+            dto.nombre = item.nombre
+            dto.peso = item.peso
+            if (item.owner != null) {
+                dto.owner = PersonajeJPADTO.desdeModelo(item.owner!!)
+            }
+            return dto
         }
-    }
 
-    constructor(item: Item, personajeJPADTO: PersonajeJPADTO): this() {
-        this.owner = personajeJPADTO
-        this.id = item.id
-        this.nombre = item.nombre
-        this.peso = item.peso
-    }
-
-
-    override fun hashCode(): Int {
-        return Objects.hash(id)
+        fun desdeModelo(item: Item, personajeJPADTO: PersonajeJPADTO): ItemJPADTO{
+            val dto = ItemJPADTO()
+            dto.id = item.id
+            dto.nombre = item.nombre
+            dto.peso = item.peso
+            dto.owner = personajeJPADTO
+            return dto
+        }
     }
 
     fun aModelo(): Item {
@@ -53,5 +57,10 @@ class ItemJPADTO() {
         item.id = id
         return item
     }
+
+    override fun hashCode(): Int {
+        return Objects.hash(id)
+    }
+
 
 }

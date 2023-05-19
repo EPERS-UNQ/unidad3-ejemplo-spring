@@ -17,12 +17,16 @@ class PersonajeJPADTO() {
     @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     var inventario: MutableSet<ItemJPADTO> = HashSet()
 
-    constructor(personaje: Personaje) : this() {
-        this.vida = personaje.vida
-        this.nombre = personaje.nombre
-        this.pesoMaximo = personaje.pesoMaximo
-        this.id = personaje.id
-        this.inventario = personaje.inventario.map{i -> ItemJPADTO(i, this)}.toMutableSet()
+    companion object {
+        fun desdeModelo(personaje: Personaje): PersonajeJPADTO{
+            val dto = PersonajeJPADTO()
+            dto.vida = personaje.vida
+            dto.nombre = personaje.nombre
+            dto.pesoMaximo = personaje.pesoMaximo
+            dto.id = personaje.id
+            dto.inventario = personaje.inventario.map{i -> ItemJPADTO.desdeModelo(i, dto)}.toMutableSet()
+            return dto
+        }
     }
 
     fun aModelo() : Personaje {

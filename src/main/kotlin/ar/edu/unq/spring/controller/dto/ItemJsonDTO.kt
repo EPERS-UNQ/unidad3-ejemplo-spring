@@ -3,21 +3,22 @@ package ar.edu.unq.spring.controller.dto
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 
-class ItemJsonDTO (val id: Long?,
-                   val nombre : String?,
-                   val peso: Int,
-                   val ownerId: Long?){
+class ItemJsonDTO (){
+    var id: Long? = null
+    var nombre : String?  = null
+    var peso: Int  = 0
+    var ownerId: Long?  = null
 
     companion object {
-        fun desdeModelo(item: Item) =
-            ItemJsonDTO (
-                id = item.id,
-                nombre = item.nombre,
-                peso = item.peso,
-                ownerId = if (item.owner != null) item.owner?.id else null
-            )
+        fun desdeModelo(item: Item): ItemJsonDTO {
+            val dto = ItemJsonDTO ()
+            dto.id = item.id
+            dto.nombre = item.nombre
+            dto.peso = item.peso
+            dto.ownerId = if (item.owner != null) item.owner?.id else null
+            return dto
+        }
     }
-
 
     fun aModelo(personaje: Personaje): Item {
         val item = aModelo()
