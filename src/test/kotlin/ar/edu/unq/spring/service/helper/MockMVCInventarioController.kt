@@ -34,8 +34,19 @@ class MockMVCInventarioController(
         val dto = PersonajeJsonDTO.desdeModelo(personaje)
         val json = objectMapper.writeValueAsString(dto)
         return mockMvc.perform(
-                    post("/inventario/personaje")
-                    .contentType(MediaType.APPLICATION_JSON).content(json))
+                post("/inventario/personaje")
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString().toLong()
+    }
+
+    fun guardarItem(item: Item): Long {
+        val dto = ItemJsonDTO.desdeModelo(item)
+        val json = objectMapper.writeValueAsString(dto)
+
+        return mockMvc.perform(
+                post("/inventario")
+                        .contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString().toLong()
     }
@@ -45,7 +56,7 @@ class MockMVCInventarioController(
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString()
 
-        val dto  = objectMapper.readValue(json, PersonajeJsonDTO::class.java)
+        val dto = objectMapper.readValue(json, PersonajeJsonDTO::class.java)
         return dto.aModelo()
     }
 
@@ -54,19 +65,8 @@ class MockMVCInventarioController(
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString()
 
-        val dto  = objectMapper.readValue(json, ItemJsonDTO::class.java)
+        val dto = objectMapper.readValue(json, ItemJsonDTO::class.java)
         return dto.aModelo()
-    }
-
-    fun guardarItem(item: Item): Long {
-        val dto = ItemJsonDTO.desdeModelo(item)
-        val json = objectMapper.writeValueAsString(dto)
-
-        return mockMvc.perform(
-                    post("/inventario")
-                    .contentType(MediaType.APPLICATION_JSON).content(json))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString().toLong()
     }
 
     fun recoger(personajeId: Long, itemId: Long) {

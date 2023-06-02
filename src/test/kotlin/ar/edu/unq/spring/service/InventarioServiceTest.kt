@@ -17,6 +17,7 @@ class InventarioServiceTest {
 
     @Autowired
     lateinit var service: InventarioService
+
     @Autowired
     lateinit var mockMVCController: MockMVCInventarioController
 
@@ -105,6 +106,6 @@ class InventarioServiceTest {
 
     @AfterEach
     fun tearDown() {
-       service.clearAll()
+        service.clearAll()
     }
 }
