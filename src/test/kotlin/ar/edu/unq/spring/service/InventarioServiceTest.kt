@@ -21,10 +21,10 @@ class InventarioServiceTest {
     @Autowired
     lateinit var mockMVCController: MockMVCInventarioController
 
-    var maguinId: Long = 0
-    var debiluchoId: Long = 0
-    var baculoId: Long = 0
-    var tunicaId: Long = 0
+    var maguinId: Long? = null
+    var debiluchoId: Long? = null
+    var baculoId: Long? = null
+    var tunicaId: Long? = null
 
 
     @BeforeAll
@@ -54,8 +54,8 @@ class InventarioServiceTest {
 
     @Test
     fun testRecoger() {
-        mockMVCController.recoger(maguinId, baculoId)
-        val maguito = mockMVCController.recuperarPersonaje(maguinId)
+        mockMVCController.recoger(maguinId!!, baculoId!!)
+        val maguito = mockMVCController.recuperarPersonaje(maguinId!!)
         Assertions.assertEquals("Maguin", maguito.nombre)
 
         Assertions.assertEquals(1, maguito.inventario.size)
@@ -69,7 +69,7 @@ class InventarioServiceTest {
     @Test
     fun testGetAll() {
         val items = mockMVCController.allItems()
-        val baculo = mockMVCController.recuperarItem(baculoId)
+        val baculo = mockMVCController.recuperarItem(baculoId!!)
 
         Assertions.assertEquals(2, items.size.toLong())
         Assertions.assertTrue(items.contains(baculo))
@@ -89,8 +89,8 @@ class InventarioServiceTest {
         var items = mockMVCController.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(0, items.size.toLong())
 
-        mockMVCController.recoger(maguinId, baculoId)
-        mockMVCController.recoger(debiluchoId, tunicaId)
+        mockMVCController.recoger(maguinId!!, baculoId!!)
+        mockMVCController.recoger(debiluchoId!!, tunicaId!!)
 
         items = mockMVCController.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(1, items.size.toLong())
