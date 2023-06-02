@@ -19,8 +19,11 @@ class InventarioControllerREST(
     private val inventarioService: InventarioService
     ) {
 
-    @GetMapping("/{personajeId}")
+    @GetMapping("/personaje/{personajeId}")
     fun recuperarPersonaje(@PathVariable personajeId: Long) = PersonajeJsonDTO.desdeModelo(inventarioService.recuperarPersonaje(personajeId)!!)
+
+    @GetMapping("/{itemId}")
+    fun recuperarItem(@PathVariable itemId: Long) = ItemJsonDTO.desdeModelo(inventarioService.recuperarItem(itemId)!!)
 
     @GetMapping("/allItems")
     fun allItems() = inventarioService.allItems().map { item -> ItemJsonDTO.desdeModelo(item)  }

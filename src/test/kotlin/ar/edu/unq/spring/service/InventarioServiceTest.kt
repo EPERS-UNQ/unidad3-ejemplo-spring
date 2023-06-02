@@ -2,6 +2,7 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.service.helper.MockMVCInventarioController
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,48 +17,58 @@ class InventarioServiceTest {
 
     @Autowired
     lateinit var service: InventarioService
+    @Autowired
+    lateinit var mockMVCController: MockMVCInventarioController
 
-    lateinit var maguin: Personaje
-    lateinit var debilucho: Personaje
-    lateinit var baculo: Item
-    lateinit var tunica: Item
+    var maguinId: Long = 0
+    var debiluchoId: Long = 0
+    var baculoId: Long = 0
+    var tunicaId: Long = 0
+
+
+    @BeforeAll
+    fun prepareMockMVC() {
+        mockMVCController.init()
+    }
+
 
     @BeforeEach
     fun prepare() {
-        tunica = Item("Tunica", 100)
-        baculo = Item("Baculo", 50)
+        val tunica = Item("Tunica", 100)
+        val baculo = Item("Baculo", 50)
 
-        maguin = Personaje("Maguin")
+        val maguin = Personaje("Maguin")
         maguin.pesoMaximo = 70
         maguin.vida = 10
 
-        debilucho = Personaje("Debilucho")
+        val debilucho = Personaje("Debilucho")
         debilucho.pesoMaximo = 1000
         debilucho.vida = 1
 
-        service.guardarItem(tunica)
-        service.guardarItem(baculo)
-        service.guardarPersonaje(maguin)
-        service.guardarPersonaje(debilucho)
+        maguinId = mockMVCController.guardarPersonaje(maguin)
+        debiluchoId = mockMVCController.guardarPersonaje(debilucho)
+        tunicaId = mockMVCController.guardarItem(tunica)
+        baculoId = mockMVCController.guardarItem(baculo)
     }
 
     @Test
     fun testRecoger() {
-        service.recoger(maguin.id!!, baculo.id!!)
-        val maguito = service.recuperarPersonaje(maguin.id!!)
-        Assertions.assertEquals("Maguin", maguito?.nombre)
+        mockMVCController.recoger(maguinId, baculoId)
+        val maguito = mockMVCController.recuperarPersonaje(maguinId)
+        Assertions.assertEquals("Maguin", maguito.nombre)
 
-        Assertions.assertEquals(1, maguito?.inventario?.size)
+        Assertions.assertEquals(1, maguito.inventario.size)
 
-        val baculo = maguito?.inventario?.iterator()?.next()
-        Assertions.assertEquals("Baculo", baculo?.nombre)
+        val baculo = maguito.inventario.iterator().next()
+        Assertions.assertEquals("Baculo", baculo.nombre)
 
-        Assertions.assertSame(baculo?.owner, maguito)
+        Assertions.assertSame(baculo.owner, maguito)
     }
 
     @Test
     fun testGetAll() {
-        val items = service.allItems()
+        val items = mockMVCController.allItems()
+        val baculo = mockMVCController.recuperarItem(baculoId)
 
         Assertions.assertEquals(2, items.size.toLong())
         Assertions.assertTrue(items.contains(baculo))
@@ -65,22 +76,22 @@ class InventarioServiceTest {
 
     @Test
     fun testGetMasPesados() {
-        val items = service.getMasPesados(10)
+        val items = mockMVCController.getMasPesados(10)
         Assertions.assertEquals(2, items.size.toLong())
 
-        val items2 = service.getMasPesados(80)
+        val items2 = mockMVCController.getMasPesados(80)
         Assertions.assertEquals(1, items2.size.toLong())
     }
 
     @Test
     fun testGetItemsDebiles() {
-        var items = service.getItemsPersonajesDebiles(5)
+        var items = mockMVCController.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(0, items.size.toLong())
 
-        service.recoger(maguin.id!!, baculo.id!!)
-        service.recoger(debilucho.id!!, tunica.id!!)
+        mockMVCController.recoger(maguinId, baculoId)
+        mockMVCController.recoger(debiluchoId, tunicaId)
 
-        items = service.getItemsPersonajesDebiles(5)
+        items = mockMVCController.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(1, items.size.toLong())
         Assertions.assertEquals("Tunica", items.iterator().next().nombre)
 
@@ -88,7 +99,7 @@ class InventarioServiceTest {
 
     @Test
     fun testGetMasPesado() {
-        val item = service.heaviestItem()
+        val item = mockMVCController.heaviestItem()
         Assertions.assertEquals("Tunica", item.nombre)
     }
 

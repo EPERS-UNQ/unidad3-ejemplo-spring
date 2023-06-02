@@ -15,6 +15,7 @@ interface InventarioService {
     fun guardarItem(item: Item): Long
     fun guardarPersonaje(personaje: Personaje): Long
     fun recuperarPersonaje(personajeId: Long): Personaje
+    fun recuperarItem(itemId: Long): Item
     fun recoger(personajeId: Long, itemId: Long)
     fun getMasPesados(peso: Int): Collection<Item>
     fun getItemsPersonajesDebiles(vida: Int): Collection<Item>

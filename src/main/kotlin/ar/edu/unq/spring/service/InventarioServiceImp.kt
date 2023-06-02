@@ -5,7 +5,6 @@ import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.ItemJPADTO
 import ar.edu.unq.spring.persistence.PersonajeDAO
-import ar.edu.unq.spring.persistence.PersonajeJPADTO
 import ar.edu.unq.spring.persistence.PersonajeJPADTO.Companion.desdeModelo
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -16,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 class InventarioServiceImp() : InventarioService {
 
-    @Autowired private lateinit var personajeDAO: PersonajeDAO
-    @Autowired private lateinit var itemDAO: ItemDAO
+    @Autowired
+    private lateinit var personajeDAO: PersonajeDAO
+    @Autowired
+    private lateinit var itemDAO: ItemDAO
 
     override fun allItems(): Collection<Item> {
         return itemDAO.findAll().map { i -> i.aModelo() }.toMutableList()
@@ -49,11 +50,15 @@ class InventarioServiceImp() : InventarioService {
         return personajeDAO.findByIdOrNull(personajeId)!!.aModelo()
     }
 
+    override fun recuperarItem(itemId: Long): Item {
+        return itemDAO.findByIdOrNull(itemId)!!.aModelo()
+    }
+
     override fun recoger(personajeId: Long, itemId: Long) {
         val personaje = personajeDAO.findByIdOrNull(personajeId)!!.aModelo()
         val item = itemDAO.findByIdOrNull(itemId)!!.aModelo()
-        item?.let { i -> personaje?.recoger(i) }
-        personaje?.let { p -> personajeDAO.save(desdeModelo(p)) }
+        item.let { i -> personaje.recoger(i) }
+        personaje.let { p -> personajeDAO.save(desdeModelo(p)) }
     }
 
     override fun getMasPesados(peso: Int): Collection<Item> {
