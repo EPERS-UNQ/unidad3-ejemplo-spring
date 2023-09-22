@@ -10,7 +10,7 @@ class Personaje() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 500, unique = true)
     var nombre: String? = null
     var vida: Int = 0
     var pesoMaximo: Int = 0
