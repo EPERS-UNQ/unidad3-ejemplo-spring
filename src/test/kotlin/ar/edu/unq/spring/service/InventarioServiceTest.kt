@@ -17,10 +17,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class InventarioServiceTest {
 
     @Autowired
-    lateinit var personajeDAO: PersonajeDAO
-    @Autowired
-    lateinit var itemDAO: ItemDAO
-    @Autowired
     lateinit var service: InventarioService
 
     lateinit var maguin: Personaje
@@ -98,6 +94,20 @@ class InventarioServiceTest {
         val item = service.heaviestItem()
         Assertions.assertEquals("Tunica", item.nombre)
     }
+
+
+    @Test
+    fun testGenerarMilesDeDatos() {
+        (1..1000000).forEach {
+            val personaje = Personaje("Personaje$it")
+            personaje.pesoMaximo = it * Math.random().toInt()
+            personaje.vida = it
+            service.guardarPersonaje(personaje)
+        }
+    }
+
+
+
 
     @AfterEach
     fun tearDown() {

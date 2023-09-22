@@ -22,7 +22,6 @@ class PersonajeDTO(
             )
     }
 
-
     fun aModelo(): Personaje {
         val personaje = Personaje()
         personaje.id = this.id

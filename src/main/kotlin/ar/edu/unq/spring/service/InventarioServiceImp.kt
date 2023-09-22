@@ -5,6 +5,8 @@ import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -24,6 +26,10 @@ class InventarioServiceImp() : InventarioService {
         return personajeDAO.findAll().toMutableSet()
     }
 
+    override fun personajesPaginados(size: Int, page: Int): Collection<Personaje> {
+        return personajeDAO.findAll(PageRequest.of(page, size, Sort.by("id"))).toMutableSet()
+    }
+
     override fun heaviestItem(): Item {
         return itemDAO.findTopByOrderByPesoDesc()
     }
@@ -38,6 +44,10 @@ class InventarioServiceImp() : InventarioService {
 
     override fun recuperarPersonaje(personajeId: Long): Personaje? {
         return personajeDAO.findByIdOrNull(personajeId)
+    }
+
+    override fun recuperarPersonajePorNombre(nombre:String): Personaje? {
+        return personajeDAO.findByNombre(nombre)
     }
 
     override fun recoger(personajeId: Long, itemId: Long) {

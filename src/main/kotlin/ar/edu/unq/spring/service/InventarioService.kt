@@ -9,10 +9,13 @@ import ar.edu.unq.spring.modelo.Personaje
 interface InventarioService {
     fun allItems(): Collection<Item>
     fun allPersonajes(): Collection<Personaje>
+    fun personajesPaginados(size:Int, page:Int): Collection<Personaje>
+
     fun heaviestItem(): Item
     fun guardarItem(item: Item)
     fun guardarPersonaje(personaje: Personaje)
     fun recuperarPersonaje(personajeId: Long): Personaje?
+    fun recuperarPersonajePorNombre(nombre: String): Personaje?
     fun recoger(personajeId: Long, itemId: Long)
     fun getMasPesados(peso: Int): Collection<Item>
     fun getItemsPersonajesDebiles(vida: Int): Collection<Item>

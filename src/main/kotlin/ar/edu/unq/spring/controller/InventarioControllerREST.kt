@@ -4,7 +4,9 @@ package ar.edu.unq.spring.controller
 import ar.edu.unq.spring.controller.dto.ItemDTO
 import ar.edu.unq.spring.controller.dto.PersonajeDTO
 import ar.edu.unq.spring.service.InventarioService
+import org.springframework.data.jpa.repository.Query
 import org.springframework.web.bind.annotation.*
+import javax.websocket.server.PathParam
 
 
 /* IMPORTANTE: En este service estamos manejando tanto personajes como items solo a modo de ejemplo.
@@ -16,13 +18,29 @@ import org.springframework.web.bind.annotation.*
 class InventarioControllerREST(private val inventarioService: InventarioService) {
 
     @GetMapping("/{personajeId}")
-    fun recuperarPersonaje(@PathVariable personajeId: Long) = PersonajeDTO.desdeModelo(inventarioService.recuperarPersonaje(personajeId)!!)
+    fun recuperarPersonaje(@PathVariable personajeId: Long): PersonajeDTO {
+        return PersonajeDTO.desdeModelo(inventarioService.recuperarPersonaje(personajeId)!!)
+    }
+
+    @GetMapping("/personaje/nombre/{nombre}")
+    fun recuperarPersonajePorNombre(@PathVariable nombre: String):PersonajeDTO  {
+        val personaje = inventarioService.recuperarPersonajePorNombre(nombre)!!
+        return PersonajeDTO.desdeModelo(personaje)
+    }
 
     @GetMapping("/allItems")
     fun allItems() = inventarioService.allItems().map { item -> ItemDTO.desdeModelo(item)  }
 
     @GetMapping("/allPersonajes")
     fun allPersonajes() = inventarioService.allPersonajes().map { personaje -> PersonajeDTO.desdeModelo(personaje)  }
+
+    @GetMapping("/personajes")
+    fun personajesPaginados(@RequestParam("size", defaultValue = "10") size:Int,
+                            @RequestParam("page", defaultValue = "0") page:Int): List<PersonajeDTO> {
+        return inventarioService.personajesPaginados(size, page)
+            .map { personaje -> PersonajeDTO.desdeModelo(personaje)  }
+    }
+
 
     @GetMapping("/heaviestItem")
     fun heaviestItem() = ItemDTO.desdeModelo(inventarioService.heaviestItem())
