@@ -2,6 +2,7 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.modelo.exception.MuchoPesoException
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.junit.jupiter.api.*
@@ -90,13 +91,22 @@ class InventarioServiceTest {
         items = service.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(1, items.size.toLong())
         Assertions.assertEquals("Tunica", items.iterator().next().nombre)
-
     }
 
     @Test
     fun testGetMasPesado() {
         val item = service.heaviestItem()
         Assertions.assertEquals("Tunica", item.nombre)
+    }
+
+    @Test
+    fun testMuchoPesoException() {
+        service.recoger(maguin.id!!, baculo.id!!)
+        val exception = Assertions.assertThrows(MuchoPesoException::class.java) {
+            service.recoger(maguin.id!!, tunica.id!!)
+        }
+
+         Assertions.assertEquals("El personaje [Maguin] no puede recoger [Tunica] porque cagar mucho peso ya", exception.message)
     }
 
     @AfterEach
