@@ -3,6 +3,7 @@ package ar.edu.unq.spring.service
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException
+import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.junit.jupiter.api.*
@@ -109,6 +110,18 @@ class InventarioServiceTest {
          Assertions.assertEquals("El personaje [Maguin] no puede recoger [Tunica] porque cagar mucho peso ya", exception.message)
     }
 
+    @Test
+    fun testNombreDePersonajeTieneQueSerUnico() {
+        val otroMaguin = Personaje("Maguin")
+        otroMaguin.pesoMaximo = 70
+        otroMaguin.vida = 10
+
+        val exception = Assertions.assertThrows(NombreDePersonajeRepetido::class.java) {
+            service.guardarPersonaje(otroMaguin)
+        }
+
+        Assertions.assertEquals("El nombre de personaje [Maguin] ya esta siendo utilizado y no puede volver a crearse", exception.message)
+    }
     @AfterEach
     fun tearDown() {
        service.clearAll()

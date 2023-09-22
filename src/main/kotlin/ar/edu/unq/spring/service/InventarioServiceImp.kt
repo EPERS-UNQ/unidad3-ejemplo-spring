@@ -2,9 +2,11 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -33,7 +35,11 @@ class InventarioServiceImp() : InventarioService {
     }
 
     override fun guardarPersonaje(personaje: Personaje) {
-        personajeDAO.save(personaje)
+        try {
+            personajeDAO.save(personaje)
+        } catch (e: DataIntegrityViolationException) {
+            throw NombreDePersonajeRepetido(personaje.nombre!!)
+        }
     }
 
     override fun recuperarPersonaje(personajeId: Long): Personaje? {
