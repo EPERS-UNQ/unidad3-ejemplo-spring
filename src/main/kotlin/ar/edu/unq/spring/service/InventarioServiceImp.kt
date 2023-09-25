@@ -2,11 +2,13 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
+import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.ItemJPADTO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.persistence.PersonajeJPADTO.Companion.desdeModelo
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -46,8 +48,12 @@ class InventarioServiceImp() : InventarioService {
         return personaje.id!!
     }
 
-    override fun recuperarPersonaje(personajeId: Long): Personaje {
-        return personajeDAO.findByIdOrNull(personajeId)!!.aModelo()
+    override fun guardarPersonaje(personaje: Personaje) {
+        try {
+            personajeDAO.save(personaje)
+        } catch (e: DataIntegrityViolationException) {
+            throw NombreDePersonajeRepetido(personaje.nombre!!)
+        }
     }
 
     override fun recuperarItem(itemId: Long): Item {
