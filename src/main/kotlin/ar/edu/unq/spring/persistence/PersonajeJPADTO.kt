@@ -14,7 +14,11 @@ class PersonajeJPADTO() {
     var vida: Int = 0
     var pesoMaximo: Int = 0
 
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "owner",
+        cascade = [CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH],
+        fetch = FetchType.EAGER
+    )
     var inventario: MutableSet<ItemJPADTO> = HashSet()
 
     companion object {
