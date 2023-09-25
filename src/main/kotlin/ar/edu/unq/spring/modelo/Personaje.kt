@@ -6,7 +6,6 @@ import kotlin.collections.HashSet
 class Personaje() {
 
     var id: Long? = null
-    @Column(nullable = false, length = 500)
     var nombre: String? = null
     var vida: Int = 0
     var pesoMaximo: Int = 0

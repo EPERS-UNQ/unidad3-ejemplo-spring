@@ -19,6 +19,7 @@ class InventarioServiceImp() : InventarioService {
 
     @Autowired
     private lateinit var personajeDAO: PersonajeDAO
+
     @Autowired
     private lateinit var itemDAO: ItemDAO
 
@@ -42,18 +43,18 @@ class InventarioServiceImp() : InventarioService {
     }
 
     override fun guardarPersonaje(personaje: Personaje): Long {
-        val personajeJPADTO = desdeModelo(personaje)
-        personajeDAO.save(personajeJPADTO)
-        personaje.id = personajeJPADTO.id
-        return personaje.id!!
-    }
-
-    override fun guardarPersonaje(personaje: Personaje) {
         try {
-            personajeDAO.save(personaje)
+            val personajeJPADTO = desdeModelo(personaje)
+            personajeDAO.save(personajeJPADTO)
+            personaje.id = personajeJPADTO.id
+            return personaje.id!!
         } catch (e: DataIntegrityViolationException) {
             throw NombreDePersonajeRepetido(personaje.nombre!!)
         }
+    }
+
+    override fun recuperarPersonaje(personajeId: Long): Personaje {
+       return personajeDAO.findById(personajeId).get().aModelo()
     }
 
     override fun recuperarItem(itemId: Long): Item {
