@@ -10,12 +10,17 @@ class Personaje() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
     @Column(nullable = false, length = 500, unique = true)
     var nombre: String? = null
     var vida: Int = 0
     var pesoMaximo: Int = 0
 
-    @OneToMany(mappedBy = "owner", cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(
+        mappedBy = "owner",
+        cascade = [CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH],
+        fetch = FetchType.EAGER
+    )
     var inventario: MutableSet<Item> = HashSet()
 
     val pesoActual: Int
