@@ -18,7 +18,7 @@ class Personaje() {
 
     @OneToMany(
         mappedBy = "owner",
-        cascade = [CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH, CascadeType.DETACH],
+        cascade = [CascadeType.ALL],
         fetch = FetchType.EAGER
     )
     var inventario: MutableSet<Item> = HashSet()

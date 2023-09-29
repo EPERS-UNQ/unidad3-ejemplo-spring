@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
@@ -122,6 +123,22 @@ class InventarioServiceTest {
 
         Assertions.assertEquals("El nombre de personaje [Maguin] ya esta siendo utilizado y no puede volver a crearse", exception.message)
     }
+
+    @Test
+    fun testDetachedEntityItemException() {
+        val espada = Item("Espada", 100)
+        service.guardarItem(espada)
+
+        val otroMaguito = Personaje("Shierke")
+        otroMaguito.pesoMaximo = 70
+        otroMaguito.vida = 10
+        otroMaguito.inventario.add(espada)
+
+        Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
+            service.guardarPersonaje(otroMaguito)
+        }
+    }
+
     @AfterEach
     fun tearDown() {
        service.clearAll()
