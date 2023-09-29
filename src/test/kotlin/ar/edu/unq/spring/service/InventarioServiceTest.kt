@@ -20,10 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class InventarioServiceTest {
 
     @Autowired
-    lateinit var personajeDAO: PersonajeDAO
-    @Autowired
-    lateinit var itemDAO: ItemDAO
-    @Autowired
     lateinit var service: InventarioService
 
     lateinit var maguin: Personaje
@@ -137,6 +133,21 @@ class InventarioServiceTest {
         Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
             service.guardarPersonaje(otroMaguito)
         }
+    }
+
+    @Test
+    fun testSinDetatchedEntityItemException() {
+        val espada = Item("Espada", 100)
+        service.guardarItem(espada)
+
+        val otroMaguito = Personaje("Shierke")
+        otroMaguito.pesoMaximo = 70
+        otroMaguito.vida = 10
+
+        service.guardarPersonaje(otroMaguito)
+
+        otroMaguito.inventario.add(espada)
+        service.guardarPersonaje(otroMaguito)
     }
 
     @AfterEach
