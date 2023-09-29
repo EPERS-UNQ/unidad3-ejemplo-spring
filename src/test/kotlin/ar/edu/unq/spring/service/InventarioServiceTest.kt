@@ -4,8 +4,6 @@ import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido
-import ar.edu.unq.spring.persistence.ItemDAO
-import ar.edu.unq.spring.persistence.PersonajeDAO
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
@@ -121,7 +119,7 @@ class InventarioServiceTest {
     }
 
     @Test
-    fun testDetachedEntityItemException() {
+    fun testPersistEnCascadeAUnaDetachedEntityLanzaDetachedEntityItemException() {
         val espada = Item("Espada", 100)
         service.guardarItem(espada)
 
@@ -152,6 +150,20 @@ class InventarioServiceTest {
         service.guardarPersonaje(otroMaguito)
     }
 
+    @Test
+    fun testMergeTransientEnCascadaNoFalla() {
+        val espada = Item("Espada", 100)
+
+        val otroMaguito = Personaje("Shierke")
+        otroMaguito.pesoMaximo = 70
+        otroMaguito.vida = 10
+        service.guardarPersonaje(otroMaguito)
+
+        otroMaguito.inventario.add(espada)
+
+        service.guardarPersonaje(otroMaguito)
+        Assertions.assertTrue(true)
+    }
     @AfterEach
     fun tearDown() {
        service.clearAll()
