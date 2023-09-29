@@ -130,9 +130,11 @@ class InventarioServiceTest {
         otroMaguito.vida = 10
         otroMaguito.inventario.add(espada)
 
-        Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
+        val exception = Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
             service.guardarPersonaje(otroMaguito)
         }
+
+        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item; nested exception is org.hibernate.PersistentObjectException: detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.message)
     }
 
     @Test
