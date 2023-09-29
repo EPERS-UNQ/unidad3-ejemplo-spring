@@ -1,5 +1,6 @@
-package ar.edu.unq.spring.persistence
+package ar.edu.unq.spring.persistence.dao
 
+import ar.edu.unq.spring.persistence.dto.ItemJPADTO
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 

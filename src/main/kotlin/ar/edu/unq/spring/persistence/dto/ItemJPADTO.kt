@@ -1,4 +1,4 @@
-package ar.edu.unq.spring.persistence
+package ar.edu.unq.spring.persistence.dto
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
@@ -21,7 +21,7 @@ class ItemJPADTO() {
     //para evitar problemas de recursion a la hora de transformar aModelo o desdeModelo
 
     companion object {
-        fun desdeModelo(item: Item): ItemJPADTO{
+        fun desdeModelo(item: Item): ItemJPADTO {
             val dto = ItemJPADTO()
             dto.id = item.id
             dto.nombre = item.nombre
@@ -32,7 +32,7 @@ class ItemJPADTO() {
             return dto
         }
 
-        fun desdeModelo(item: Item, personajeJPADTO: PersonajeJPADTO): ItemJPADTO{
+        fun desdeModelo(item: Item, personajeJPADTO: PersonajeJPADTO): ItemJPADTO {
             val dto = ItemJPADTO()
             dto.id = item.id
             dto.nombre = item.nombre

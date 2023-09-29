@@ -1,4 +1,4 @@
-package ar.edu.unq.spring.persistence
+package ar.edu.unq.spring.persistence.dto
 
 import ar.edu.unq.spring.modelo.Personaje
 import javax.persistence.*
@@ -22,13 +22,13 @@ class PersonajeJPADTO() {
     var inventario: MutableSet<ItemJPADTO> = HashSet()
 
     companion object {
-        fun desdeModelo(personaje: Personaje): PersonajeJPADTO{
+        fun desdeModelo(personaje: Personaje): PersonajeJPADTO {
             val dto = PersonajeJPADTO()
             dto.vida = personaje.vida
             dto.nombre = personaje.nombre
             dto.pesoMaximo = personaje.pesoMaximo
             dto.id = personaje.id
-            dto.inventario = personaje.inventario.map{i -> ItemJPADTO.desdeModelo(i, dto)}.toMutableSet()
+            dto.inventario = personaje.inventario.map{i -> ItemJPADTO.desdeModelo(i, dto) }.toMutableSet()
             return dto
         }
     }
