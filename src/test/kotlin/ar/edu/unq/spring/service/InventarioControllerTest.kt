@@ -16,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
 @TestInstance(PER_CLASS)
-class InventarioServiceTest {
+class InventarioControllerTest {
 
     @Autowired
     lateinit var service: InventarioService
