@@ -21,10 +21,7 @@ import org.springframework.web.util.NestedServletException
 import java.lang.reflect.Proxy
 
 @Component
-class MockMVCInventarioController(
-    @Autowired
-    private val inventarioController: InventarioControllerREST
-) {
+class MockMVCInventarioController {
     @Autowired
     lateinit var mockMvc: MockMvc
     @Autowired
