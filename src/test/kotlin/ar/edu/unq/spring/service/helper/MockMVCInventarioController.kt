@@ -25,17 +25,10 @@ class MockMVCInventarioController(
     @Autowired
     private val inventarioController: InventarioControllerREST
 ) {
-
+    @Autowired
     lateinit var mockMvc: MockMvc
+    @Autowired
     lateinit var objectMapper: ObjectMapper
-
-    //En realidad es mejor armar y pasar estas cosas en un archivo de @Configuration de Beans de Spring.
-    //Para simplificar el ejemplo, nos ahorramos ese archivo y lo hacemos aca.
-    fun init() {
-        mockMvc = MockMvcBuilders.standaloneSetup(inventarioController).build()
-        objectMapper = ObjectMapper()
-    }
-
 
     // MockMVC por default re-throwea "NestedServletException" cuando le llega un error.
     // Aca estamos esperando por esa excepcion, y re-throweamos la causa.
