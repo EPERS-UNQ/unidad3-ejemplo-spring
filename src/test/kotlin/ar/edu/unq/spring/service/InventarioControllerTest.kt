@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
+// Con @ContextConfiguration le indicamos que configuraciones queremos que levante
 @ContextConfiguration(classes = [InventarioControllerTestConfiguration::class])
 @TestInstance(PER_CLASS)
 class InventarioControllerTest {

@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.util.NestedServletException
 import java.lang.reflect.Proxy
 
+// Con @Component le decimos a Spring que inicialise este objeto y lo agregue a su contexto
+// Por lo que queda disponible para ser Autowired en otro u otros lugares
 @Component
 class MockMVCInventarioController {
     @Autowired
