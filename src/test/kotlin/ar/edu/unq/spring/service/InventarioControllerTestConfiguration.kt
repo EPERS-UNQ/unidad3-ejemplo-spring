@@ -13,10 +13,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 // por componentes (@Service, @Controller, @Component y DAOs) para levantar y agregar al contexto.
 // Decirle que haga un escaneo desde el root es poco eficiente, pero nos sirve en un ejemplo chico
 
-// Ahora, por que en los tests hace falta agregar un component scan y en la configuracion del mainApp (EjemploSpringApp.kt) no?
+// Ahora, por que en la configuracion de tests hace falta agregar un component scan y en la configuracion del mainApp (EjemploSpringApp.kt) no?
 // Por que el main app cuando lo corres fuerza un scan desde la carpeta donde esta corriendo para abajo.
 // Y no casualmente la pusimos en el root del proyecto por esa misma razon.
-// El test hace lo mismo, fuerza un scan del test para abajo,
+// El test hace lo mismo, fuerza un scan del archivo de test (InventarioServiceControllerTest) para abajo,
 // pero como no encuentra a los DAOs, service y controllers (No estan en las carpetas del test para abajo)
 // Hay que agregarle el @ComponentScan a la configuracion para que vaya a escanear por los objetos que nos faltan.
 @ComponentScan(basePackages = ["ar.edu.unq.spring"])
