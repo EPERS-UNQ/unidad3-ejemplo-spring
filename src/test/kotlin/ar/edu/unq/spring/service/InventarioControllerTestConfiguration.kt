@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 // El test hace lo mismo, fuerza un scan del archivo de test (InventarioServiceControllerTest) para abajo,
 // pero como no encuentra a los DAOs, service y controllers (No estan en las carpetas del test para abajo)
 // hay que agregarle el @ComponentScan a la configuracion para que vaya a escanear por los objetos que nos faltan.
+
+// Una vez ya se hicieron todos los escaneos, hace los autowirings y le pasa por ejemplo el controller al mockMVC que declaramos abajo
 @ComponentScan(basePackages = ["ar.edu.unq.spring"])
 class InventarioControllerTestConfiguration {
 
@@ -28,6 +30,8 @@ class InventarioControllerTestConfiguration {
     }
 
     @Bean
+    // Spring va a intentar hacer autowiring de toda dependencia que declaremos
+    // como parametro en el metodo del Bean.
     fun mockMvc(inventarioController: InventarioControllerREST): MockMvc {
         return MockMvcBuilders.standaloneSetup(inventarioController).build()
     }
