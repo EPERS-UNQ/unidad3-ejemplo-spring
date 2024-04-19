@@ -4,6 +4,8 @@ import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido
+import ar.edu.unq.spring.service.interfaces.InventarioService
+import ar.edu.unq.spring.service.interfaces.PersonajeService
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
@@ -18,7 +20,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 class InventarioServiceTest {
 
     @Autowired
-    lateinit var service: InventarioService
+    lateinit var inventarioService: InventarioService
+
+    @Autowired
+    lateinit var personajeService: PersonajeService
 
     lateinit var maguin: Personaje
     lateinit var debilucho: Personaje
@@ -38,17 +43,17 @@ class InventarioServiceTest {
         debilucho.pesoMaximo = 1000
         debilucho.vida = 1
 
-        service.guardarItem(tunica)
-        service.guardarItem(baculo)
-        service.guardarPersonaje(maguin)
-        service.guardarPersonaje(debilucho)
+        inventarioService.guardarItem(tunica)
+        inventarioService.guardarItem(baculo)
+        personajeService.guardarPersonaje(maguin)
+        personajeService.guardarPersonaje(debilucho)
     }
 
     @Test
     fun testRecoger() {
-        service.recoger(maguin.id!!, baculo.id!!)
+        inventarioService.recoger(maguin.id!!, baculo.id!!)
 
-        val maguito = service.recuperarPersonaje(maguin.id!!)
+        val maguito = personajeService.recuperarPersonaje(maguin.id!!)
         Assertions.assertEquals("Maguin", maguito?.nombre)
 
         Assertions.assertEquals(1, maguito?.inventario?.size)
@@ -61,7 +66,7 @@ class InventarioServiceTest {
 
     @Test
     fun testGetAll() {
-        val items = service.allItems()
+        val items = inventarioService.allItems()
 
         Assertions.assertEquals(2, items.size.toLong())
         Assertions.assertTrue(items.contains(baculo))
@@ -69,37 +74,37 @@ class InventarioServiceTest {
 
     @Test
     fun testGetMasPesados() {
-        val items = service.getMasPesados(10)
+        val items = inventarioService.getMasPesados(10)
         Assertions.assertEquals(2, items.size.toLong())
 
-        val items2 = service.getMasPesados(80)
+        val items2 = inventarioService.getMasPesados(80)
         Assertions.assertEquals(1, items2.size.toLong())
     }
 
     @Test
     fun testGetItemsDebiles() {
-        var items = service.getItemsPersonajesDebiles(5)
+        var items = inventarioService.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(0, items.size.toLong())
 
-        service.recoger(maguin.id!!, baculo.id!!)
-        service.recoger(debilucho.id!!, tunica.id!!)
+        inventarioService.recoger(maguin.id!!, baculo.id!!)
+        inventarioService.recoger(debilucho.id!!, tunica.id!!)
 
-        items = service.getItemsPersonajesDebiles(5)
+        items = inventarioService.getItemsPersonajesDebiles(5)
         Assertions.assertEquals(1, items.size.toLong())
         Assertions.assertEquals("Tunica", items.iterator().next().nombre)
     }
 
     @Test
     fun testGetMasPesado() {
-        val item = service.heaviestItem()
+        val item = inventarioService.heaviestItem()
         Assertions.assertEquals("Tunica", item.nombre)
     }
 
     @Test
     fun testMuchoPesoException() {
-        service.recoger(maguin.id!!, baculo.id!!)
+        inventarioService.recoger(maguin.id!!, baculo.id!!)
         val exception = Assertions.assertThrows(MuchoPesoException::class.java) {
-            service.recoger(maguin.id!!, tunica.id!!)
+            inventarioService.recoger(maguin.id!!, tunica.id!!)
         }
 
          Assertions.assertEquals("El personaje [Maguin] no puede recoger [Tunica] porque cagar mucho peso ya", exception.message)
@@ -112,7 +117,7 @@ class InventarioServiceTest {
         otroMaguin.vida = 10
 
         val exception = Assertions.assertThrows(NombreDePersonajeRepetido::class.java) {
-            service.guardarPersonaje(otroMaguin)
+            personajeService.guardarPersonaje(otroMaguin)
         }
 
         Assertions.assertEquals("El nombre de personaje [Maguin] ya esta siendo utilizado y no puede volver a crearse", exception.message)
@@ -121,7 +126,7 @@ class InventarioServiceTest {
     @Test
     fun testPersistEnCascadeAUnaDetachedEntityLanzaDetachedEntityItemException() {
         val espada = Item("Espada", 100)
-        service.guardarItem(espada)
+        inventarioService.guardarItem(espada)
 
         val otroMaguito = Personaje("Shierke")
         otroMaguito.pesoMaximo = 70
@@ -129,7 +134,7 @@ class InventarioServiceTest {
         otroMaguito.inventario.add(espada)
 
         val exception = Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
-            service.guardarPersonaje(otroMaguito)
+            personajeService.guardarPersonaje(otroMaguito)
         }
 
         Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item; nested exception is org.hibernate.PersistentObjectException: detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.message)
@@ -138,16 +143,16 @@ class InventarioServiceTest {
     @Test
     fun testSinDetatchedEntityItemException() {
         val espada = Item("Espada", 100)
-        service.guardarItem(espada)
+        inventarioService.guardarItem(espada)
 
         val otroMaguito = Personaje("Shierke")
         otroMaguito.pesoMaximo = 70
         otroMaguito.vida = 10
 
-        service.guardarPersonaje(otroMaguito)
+        personajeService.guardarPersonaje(otroMaguito)
 
         otroMaguito.inventario.add(espada)
-        service.guardarPersonaje(otroMaguito)
+        personajeService.guardarPersonaje(otroMaguito)
     }
 
     @Test
@@ -157,15 +162,15 @@ class InventarioServiceTest {
         val otroMaguito = Personaje("Shierke")
         otroMaguito.pesoMaximo = 70
         otroMaguito.vida = 10
-        service.guardarPersonaje(otroMaguito)
+        personajeService.guardarPersonaje(otroMaguito)
 
         otroMaguito.inventario.add(espada)
 
-        service.guardarPersonaje(otroMaguito)
+        personajeService.guardarPersonaje(otroMaguito)
         Assertions.assertTrue(true)
     }
     @AfterEach
     fun tearDown() {
-       service.clearAll()
+       inventarioService.clearAll()
     }
 }

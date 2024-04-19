@@ -24,7 +24,7 @@ class Personaje() {
     var inventario: MutableSet<Item> = HashSet()
 
     val pesoActual: Int
-        get() = inventario.sumBy { it.peso }
+        get() = inventario.sumOf { it.peso }
 
     constructor(nombre: String) : this() {
         this.nombre = nombre

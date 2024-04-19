@@ -20,10 +20,10 @@ class Item() {
         this.peso = peso
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val item = o as Item?
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val item = other as Item?
         return id == item!!.id
     }
 
