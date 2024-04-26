@@ -15,6 +15,9 @@ class InventarioServiceImp() : InventarioService {
 
     @Autowired private lateinit var personajeDAO: PersonajeDAO
     @Autowired private lateinit var itemDAO: ItemDAO
+    override fun getItem(itemId: Long): Item {
+        return itemDAO.findById(itemId).get()
+    }
 
     override fun allItems(): Collection<Item> {
         return itemDAO.findAll().toMutableSet()
@@ -24,8 +27,8 @@ class InventarioServiceImp() : InventarioService {
         return itemDAO.findTopByOrderByPesoDesc()
     }
 
-    override fun guardarItem(item: Item) {
-        itemDAO.save(item)
+    override fun guardarItem(item: Item): Item {
+       return itemDAO.save(item)
     }
 
     override fun recoger(personajeId: Long, itemId: Long) {
@@ -46,6 +49,10 @@ class InventarioServiceImp() : InventarioService {
     override fun clearAll() {
         itemDAO.deleteAll()
         personajeDAO.deleteAll()
+    }
+
+    override fun deleteItem(item: Item) {
+        itemDAO.delete(item)
     }
 
 }

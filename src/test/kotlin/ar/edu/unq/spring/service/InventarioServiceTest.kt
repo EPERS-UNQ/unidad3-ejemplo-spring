@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.dao.InvalidDataAccessApiUsageException
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.annotation.Transactional
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -132,6 +133,26 @@ class InventarioServiceTest {
         otroMaguito.pesoMaximo = 70
         otroMaguito.vida = 10
         otroMaguito.inventario.add(espada)
+        espada.owner = otroMaguito
+
+        val exception = Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
+            personajeService.guardarPersonaje(otroMaguito)
+        }
+
+        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item; nested exception is org.hibernate.PersistentObjectException: detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.message)
+    }
+
+    @Test
+    fun deleteTambienPasaADetachedUnaVezTerminadaUnaTransaccion() {
+        val espada = Item("Espada", 100)
+        inventarioService.guardarItem(espada)
+        inventarioService.deleteItem(espada)
+
+        val otroMaguito = Personaje("Shierke")
+        otroMaguito.pesoMaximo = 70
+        otroMaguito.vida = 10
+        otroMaguito.inventario.add(espada)
+        espada.owner = otroMaguito
 
         val exception = Assertions.assertThrows(InvalidDataAccessApiUsageException::class.java) {
             personajeService.guardarPersonaje(otroMaguito)
@@ -152,23 +173,53 @@ class InventarioServiceTest {
         personajeService.guardarPersonaje(otroMaguito)
 
         otroMaguito.inventario.add(espada)
+        espada.owner = otroMaguito
+
         personajeService.guardarPersonaje(otroMaguito)
+        val maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.id!!)
+        Assertions.assertTrue(maguitoRecuperado!!.inventario.isNotEmpty())
     }
 
     @Test
     fun testMergeTransientEnCascadaNoFalla() {
-        val espada = Item("Espada", 100)
-
         val otroMaguito = Personaje("Shierke")
         otroMaguito.pesoMaximo = 70
         otroMaguito.vida = 10
         personajeService.guardarPersonaje(otroMaguito)
 
+        val espada = Item("Espada", 100)
         otroMaguito.inventario.add(espada)
+        espada.owner = otroMaguito
+
 
         personajeService.guardarPersonaje(otroMaguito)
-        Assertions.assertTrue(true)
     }
+
+    @Transactional
+    @Test
+    fun testMergeSincronizaLosCambiosHechosAlObjeto() {
+        val espada = Item("Espada", 100)
+        inventarioService.guardarItem(espada)
+
+        val mismaEspada = inventarioService.getItem(espada.id!!)
+        mismaEspada.nombre = "Espada Gastada"
+        inventarioService.guardarItem(mismaEspada)
+
+        val otroMaguito = Personaje("Shierke")
+        otroMaguito.pesoMaximo = 70
+        otroMaguito.vida = 10
+
+        personajeService.guardarPersonaje(otroMaguito)
+
+        otroMaguito.inventario.add(espada)
+        mismaEspada.owner = otroMaguito
+
+        personajeService.guardarPersonaje(otroMaguito)
+
+        val maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.id!!)
+        Assertions.assertEquals(maguitoRecuperado!!.inventario.first().nombre, "Espada Gastada")
+    }
+
     @AfterEach
     fun tearDown() {
        inventarioService.clearAll()
