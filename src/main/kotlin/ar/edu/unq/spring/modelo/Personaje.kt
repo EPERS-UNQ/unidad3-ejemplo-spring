@@ -5,10 +5,13 @@ import javax.persistence.*
 import kotlin.collections.HashSet
 
 @Entity
-class Personaje() {
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+abstract class Personaje() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     var id: Long? = null
     @Column(nullable = false, length = 500)
     var nombre: String? = null
@@ -19,7 +22,7 @@ class Personaje() {
     var inventario: MutableSet<Item> = HashSet()
 
     val pesoActual: Int
-        get() = inventario.sumBy { it.peso }
+        get() = inventario.sumOf { it.peso }
 
     constructor(nombre: String) : this() {
         this.nombre = nombre

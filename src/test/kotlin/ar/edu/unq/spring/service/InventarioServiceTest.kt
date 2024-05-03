@@ -2,14 +2,15 @@ package ar.edu.unq.spring.service
 
 import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.modelo.Personaje
-import ar.edu.unq.spring.persistence.ItemDAO
-import ar.edu.unq.spring.persistence.PersonajeDAO
+import ar.edu.unq.spring.modelo.clasesDePersonajes.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.transaction.annotation.Transactional
+import kotlin.random.Random
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest
@@ -29,11 +30,11 @@ class InventarioServiceTest {
         tunica = Item("Tunica", 100)
         baculo = Item("Baculo", 50)
 
-        maguin = Personaje("Maguin")
+        maguin = Mago("Maguin")
         maguin.pesoMaximo = 70
         maguin.vida = 10
 
-        debilucho = Personaje("Debilucho")
+        debilucho = Guerrero("Debilucho")
         debilucho.pesoMaximo = 1000
         debilucho.vida = 1
 
@@ -95,22 +96,34 @@ class InventarioServiceTest {
         Assertions.assertEquals("Tunica", item.nombre)
     }
 
-
     @Test
     fun testGenerarMilesDeDatos() {
-        (1..1000000).forEach {
-            val personaje = Personaje("Personaje$it")
-            personaje.pesoMaximo = it * Math.random().toInt()
-            personaje.vida = it
-            service.guardarPersonaje(personaje)
+        (1..60000).forEach {
+            val unMago = Mago("Mago-$it")
+            unMago.pesoMaximo = Random.nextInt(200, 300)
+            unMago.vida = Random.nextInt(50, 200)
+            unMago.mana = Random.nextInt(400, 1000)
+            service.guardarPersonaje(unMago)
+        }
+        (1..60000).forEach {
+            val unGuerrero = Guerrero("Guerrero-$it")
+            unGuerrero.pesoMaximo = Random.nextInt(500, 900)
+            unGuerrero.vida = Random.nextInt(300, 1200)
+            unGuerrero.fuerza = Random.nextInt(350, 675)
+            service.guardarPersonaje(unGuerrero)
+        }
+        (1..60000).forEach {
+            val unPicaro = Picaro("Picaro-$it")
+            unPicaro.pesoMaximo = Random.nextInt(50, 125)
+            unPicaro.vida = Random.nextInt(100, 150)
+            unPicaro.sigilo = Random.nextInt(250, 500)
+            service.guardarPersonaje(unPicaro)
         }
     }
 
-
-
-
     @AfterEach
     fun tearDown() {
-       service.clearAll()
+//       service.clearAll()
     }
+
 }
