@@ -4,13 +4,11 @@ import ar.edu.unq.spring.modelo.Item
 import ar.edu.unq.spring.persistence.ItemDAO
 import ar.edu.unq.spring.persistence.PersonajeDAO
 import ar.edu.unq.spring.service.interfaces.InventarioService
+import ar.edu.unq.spring.service.transaction.TransactionRunner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-
 @Service
-@Transactional
 class InventarioServiceImp() : InventarioService {
 
     @Autowired private lateinit var personajeDAO: PersonajeDAO
@@ -28,14 +26,18 @@ class InventarioServiceImp() : InventarioService {
     }
 
     override fun guardarItem(item: Item): Item {
-       return itemDAO.save(item)
+        return TransactionRunner.runTrx {
+            itemDAO.save(item)
+        }
     }
 
     override fun recoger(personajeId: Long, itemId: Long) {
-        val personaje = personajeDAO.findByIdOrNull(personajeId)
-        val item = itemDAO.findByIdOrNull(itemId)
-        item?.let { i -> personaje?.recoger(i) }
-        personaje?.let { p -> personajeDAO.save(p) }
+        TransactionRunner.runTrx {
+            val personaje = personajeDAO.findByIdOrNull(personajeId)
+            val item = itemDAO.findByIdOrNull(itemId)
+            item?.let { i -> personaje?.recoger(i) }
+            personaje?.let { p -> personajeDAO.save(p) }
+        }
     }
 
     override fun getMasPesados(peso: Int): Collection<Item> {
@@ -47,12 +49,16 @@ class InventarioServiceImp() : InventarioService {
     }
 
     override fun clearAll() {
-        itemDAO.deleteAll()
-        personajeDAO.deleteAll()
+        TransactionRunner.runTrx {
+            itemDAO.deleteAll()
+            personajeDAO.deleteAll()
+        }
     }
 
     override fun deleteItem(item: Item) {
-        itemDAO.delete(item)
+        TransactionRunner.runTrx {
+            itemDAO.delete(item)
+        }
     }
 
 }
