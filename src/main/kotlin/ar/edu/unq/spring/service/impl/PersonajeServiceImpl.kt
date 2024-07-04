@@ -13,6 +13,8 @@ import org.springframework.transaction.TransactionDefinition
 import org.springframework.transaction.TransactionStatus
 import org.springframework.transaction.support.DefaultTransactionDefinition
 
+// Ejemplo de transaccionalidad manejada manualmente
+// haciendo uso directo del transaction manager de Spring
 @Service
 class PersonajeServiceImpl() : PersonajeService {
 

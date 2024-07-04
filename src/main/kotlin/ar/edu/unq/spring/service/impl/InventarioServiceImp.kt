@@ -8,6 +8,10 @@ import ar.edu.unq.spring.service.transaction.TransactionRunner
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+
+// Ejemplo de transaccionalidad manejada manualmente
+// haciendo uso de nuestro TransactionRunner para encapsular la logica transaccional
+// independientemente de la base de datos
 @Service
 class InventarioServiceImp() : InventarioService {
 

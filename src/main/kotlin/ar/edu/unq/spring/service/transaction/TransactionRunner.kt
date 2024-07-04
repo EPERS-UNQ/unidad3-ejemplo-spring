@@ -7,6 +7,8 @@ interface Transaction {
     fun rollback()
 }
 
+
+// Mirar AppConfiguration que es donde se agregan las transacciones usadas
 object TransactionRunner {
     private var transactions:MutableList<Transaction> = mutableListOf()
 
