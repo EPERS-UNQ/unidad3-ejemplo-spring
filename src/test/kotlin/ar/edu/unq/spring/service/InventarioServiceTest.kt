@@ -222,6 +222,7 @@ class InventarioServiceTest {
 
     @AfterEach
     fun tearDown() {
-       inventarioService.clearAll()
+        inventarioService.clearAll()
+        personajeService.clearAll()
     }
 }

@@ -48,7 +48,6 @@ class InventarioServiceImp() : InventarioService {
 
     override fun clearAll() {
         itemDAO.deleteAll()
-        personajeDAO.deleteAll()
     }
 
     override fun deleteItem(item: Item) {

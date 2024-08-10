@@ -7,4 +7,5 @@ interface PersonajeService {
     fun allPersonajes(): Collection<Personaje>
     fun guardarPersonaje(personaje: Personaje)
     fun recuperarPersonaje(personajeId: Long): Personaje?
+    fun clearAll()
 }
