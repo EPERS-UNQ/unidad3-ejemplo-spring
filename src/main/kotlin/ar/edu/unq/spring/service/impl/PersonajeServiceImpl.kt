@@ -32,4 +32,8 @@ class PersonajeServiceImpl() : PersonajeService {
         return personajeDAO.findByIdOrNull(personajeId)
     }
 
+    override fun clearAll() {
+        personajeDAO.deleteAll()
+    }
+
 }
