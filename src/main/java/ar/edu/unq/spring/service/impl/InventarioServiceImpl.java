@@ -44,12 +44,14 @@ public class InventarioServiceImpl implements InventarioService {
 
     @Override
     public void recoger(Long personajeId, Long itemId) {
-        Optional<Personaje> personaje = personajeDAO.findById(personajeId);
-        Optional<Item> item = itemDAO.findById(itemId);
-        if (personaje.isPresent() && item.isPresent()) {
-            personaje.get().recoger(item.get());
-            personajeDAO.save(personaje.get());
-        }
+        Personaje personaje = personajeDAO.findById(personajeId)
+                .orElseThrow(() -> new NoSuchElementException("Personaje not found with id: " + personajeId));
+
+        Item item = itemDAO.findById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("Item not found with id: " + itemId));
+
+        personaje.recoger(item);
+        personajeDAO.save(personaje);
     }
 
     @Override
