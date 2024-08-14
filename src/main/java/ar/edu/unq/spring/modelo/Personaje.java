@@ -2,8 +2,15 @@ package ar.edu.unq.spring.modelo;
 
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.HashSet;
 import java.util.Set;
+
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 @Entity
 public class Personaje {
@@ -24,51 +31,10 @@ public class Personaje {
     )
     private Set<Item> inventario = new HashSet<>();
 
-    public Personaje() {
-    }
-
-    public Personaje(String nombre) {
+    public Personaje(String nombre, int vida, int pesoMaximo) {
         this.nombre = nombre;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getVida() {
-        return vida;
-    }
-
-    public void setVida(int vida) {
         this.vida = vida;
-    }
-
-    public int getPesoMaximo() {
-        return pesoMaximo;
-    }
-
-    public void setPesoMaximo(int pesoMaximo) {
         this.pesoMaximo = pesoMaximo;
-    }
-
-    public Set<Item> getInventario() {
-        return inventario;
-    }
-
-    public void setInventario(Set<Item> inventario) {
-        this.inventario = inventario;
     }
 
     public int getPesoActual() {
@@ -84,8 +50,4 @@ public class Personaje {
         item.setOwner(this);
     }
 
-    @Override
-    public String toString() {
-        return nombre;
-    }
 }

@@ -5,31 +5,31 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.persistence.ItemDAO;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
-public class InventarioServiceImp implements InventarioService {
-
-    @Autowired
-    private PersonajeDAO personajeDAO;
-
-    @Autowired
-    private ItemDAO itemDAO;
-
-    @Override
-    public Item getItem(Long itemId) {
-        return itemDAO.findById(itemId).orElse(null);
+public class InventarioServiceImpl implements InventarioService {
+    private final PersonajeDAO personajeDAO;
+    private final ItemDAO itemDAO;
+    public InventarioServiceImpl(PersonajeDAO personajeDAO, ItemDAO itemDAO) {
+        this.personajeDAO = personajeDAO;
+        this.itemDAO = itemDAO;
     }
 
     @Override
-    public Collection<Item> allItems() {
-        return itemDAO.findAll();
+    public Item getItem(Long itemId) {
+        return itemDAO.findById(itemId).orElseThrow(() -> new NoSuchElementException("Item not found with id: " + itemId));
+    }
+
+    @Override
+    public Set<Item> allItems() {
+        return Set.copyOf(itemDAO.findAll());
     }
 
     @Override
@@ -53,12 +53,12 @@ public class InventarioServiceImp implements InventarioService {
     }
 
     @Override
-    public Collection<Item> getMasPesados(int peso) {
+    public Set<Item> getMasPesados(int peso) {
         return itemDAO.getMasPesados(peso);
     }
 
     @Override
-    public Collection<Item> getItemsPersonajesDebiles(int vida) {
+    public Set<Item> getItemsPersonajesDebiles(int vida) {
         return itemDAO.getItemsDePersonajesDebiles(vida);
     }
 

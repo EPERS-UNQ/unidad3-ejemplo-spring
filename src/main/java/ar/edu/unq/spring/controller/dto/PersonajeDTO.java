@@ -6,20 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PersonajeDTO {
-    private Long id;
-    private String nombre;
-    private int vida;
-    private int pesoMaximo;
-    private Set<ItemDTO> inventario;
-
-    public PersonajeDTO(Long id, String nombre, int vida, int pesoMaximo, Set<ItemDTO> inventario) {
-        this.id = id;
-        this.nombre = nombre;
-        this.vida = vida;
-        this.pesoMaximo = pesoMaximo;
-        this.inventario = inventario;
-    }
+public record PersonajeDTO(Long id, String nombre, int vida, int pesoMaximo, Set<ItemDTO> inventario) {
 
     public static PersonajeDTO desdeModelo(Personaje personaje) {
         return new PersonajeDTO(
@@ -34,11 +21,8 @@ public class PersonajeDTO {
     }
 
     public Personaje aModelo() {
-        Personaje personaje = new Personaje();
+        Personaje personaje = new Personaje(this.nombre, this.vida, this.pesoMaximo);
         personaje.setId(this.id);
-        personaje.setNombre(this.nombre);
-        personaje.setVida(this.vida);
-        personaje.setPesoMaximo(this.pesoMaximo);
         personaje.setInventario(this.inventario != null ?
                 this.inventario.stream()
                         .map(itemDTO -> itemDTO.aModelo(personaje))
@@ -46,46 +30,5 @@ public class PersonajeDTO {
                 new HashSet<>()
         );
         return personaje;
-    }
-
-    // Getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getVida() {
-        return vida;
-    }
-
-    public void setVida(int vida) {
-        this.vida = vida;
-    }
-
-    public int getPesoMaximo() {
-        return pesoMaximo;
-    }
-
-    public void setPesoMaximo(int pesoMaximo) {
-        this.pesoMaximo = pesoMaximo;
-    }
-
-    public Set<ItemDTO> getInventario() {
-        return inventario;
-    }
-
-    public void setInventario(Set<ItemDTO> inventario) {
-        this.inventario = inventario;
     }
 }

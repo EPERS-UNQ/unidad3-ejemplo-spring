@@ -1,6 +1,6 @@
 package ar.edu.unq.spring.modelo.exception;
 
-public class NombreDePersonajeRepetido extends RuntimeException {
+final public class NombreDePersonajeRepetido extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

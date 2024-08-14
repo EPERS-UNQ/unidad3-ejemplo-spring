@@ -4,23 +4,25 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 @Transactional
 public class PersonajeServiceImpl implements PersonajeService {
 
-    @Autowired
-    private PersonajeDAO personajeDAO;
+    private final PersonajeDAO personajeDAO;
+    public PersonajeServiceImpl(PersonajeDAO personajeDAO) {
+        this.personajeDAO = personajeDAO;
+    }
 
     @Override
-    public Iterable<Personaje> allPersonajes() {
-        return personajeDAO.findAll();
+    public Set<Personaje> allPersonajes() {
+        return Set.copyOf(personajeDAO.findAll());
     }
 
     @Override
@@ -33,8 +35,8 @@ public class PersonajeServiceImpl implements PersonajeService {
     }
 
     @Override
-    public Optional<Personaje> recuperarPersonaje(Long personajeId) {
-        return personajeDAO.findById(personajeId);
+    public Personaje recuperarPersonaje(Long personajeId) {
+        return personajeDAO.findById(personajeId).orElseThrow(() -> new NoSuchElementException("Personaje not found with id: " + personajeId));
     }
 
     @Override

@@ -3,7 +3,7 @@ package ar.edu.unq.spring.modelo.exception;
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.modelo.Personaje;
 
-public class MuchoPesoException extends RuntimeException {
+final public class MuchoPesoException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
     private final Personaje personaje;

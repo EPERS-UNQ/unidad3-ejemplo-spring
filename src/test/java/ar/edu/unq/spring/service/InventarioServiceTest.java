@@ -6,19 +6,17 @@ import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InventarioServiceTest {
 
     @Autowired
@@ -37,13 +35,8 @@ public class InventarioServiceTest {
         tunica = new Item("Tunica", 100);
         baculo = new Item("Baculo", 50);
 
-        maguin = new Personaje("Maguin");
-        maguin.setPesoMaximo(70);
-        maguin.setVida(10);
-
-        debilucho = new Personaje("Debilucho");
-        debilucho.setPesoMaximo(1000);
-        debilucho.setVida(1);
+        maguin = new Personaje("Maguin", 10, 70);
+        debilucho = new Personaje("Debilucho", 1, 1000);
 
         inventarioService.guardarItem(tunica);
         inventarioService.guardarItem(baculo);
@@ -55,7 +48,7 @@ public class InventarioServiceTest {
     public void testRecoger() {
         inventarioService.recoger(maguin.getId(), baculo.getId());
 
-        Personaje maguito = personajeService.recuperarPersonaje(maguin.getId()).get();
+        Personaje maguito = personajeService.recuperarPersonaje(maguin.getId());
         Assertions.assertEquals("Maguin", maguito.getNombre());
         Assertions.assertEquals(1, maguito.getInventario().size());
 
@@ -110,9 +103,7 @@ public class InventarioServiceTest {
 
     @Test
     public void testNombreDePersonajeTieneQueSerUnico() {
-        Personaje otroMaguin = new Personaje("Maguin");
-        otroMaguin.setPesoMaximo(70);
-        otroMaguin.setVida(10);
+        Personaje otroMaguin = new Personaje("Maguin", 10, 70);
 
         NombreDePersonajeRepetido exception = Assertions.assertThrows(NombreDePersonajeRepetido.class, () -> {
             personajeService.guardarPersonaje(otroMaguin);
@@ -125,9 +116,8 @@ public class InventarioServiceTest {
         Item espada = new Item("Espada", 100);
         inventarioService.guardarItem(espada);
 
-        Personaje otroMaguito = new Personaje("Shierke");
-        otroMaguito.setPesoMaximo(70);
-        otroMaguito.setVida(10);
+        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
+
         otroMaguito.getInventario().add(espada);
         espada.setOwner(otroMaguito);
 
@@ -143,9 +133,8 @@ public class InventarioServiceTest {
         inventarioService.guardarItem(espada);
         inventarioService.deleteItem(espada);
 
-        Personaje otroMaguito = new Personaje("Shierke");
-        otroMaguito.setPesoMaximo(70);
-        otroMaguito.setVida(10);
+        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
+
         otroMaguito.getInventario().add(espada);
         espada.setOwner(otroMaguito);
 
@@ -160,9 +149,7 @@ public class InventarioServiceTest {
         Item espada = new Item("Espada", 100);
         inventarioService.guardarItem(espada);
 
-        Personaje otroMaguito = new Personaje("Shierke");
-        otroMaguito.setPesoMaximo(70);
-        otroMaguito.setVida(10);
+        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
 
         personajeService.guardarPersonaje(otroMaguito);
 
@@ -170,15 +157,14 @@ public class InventarioServiceTest {
         espada.setOwner(otroMaguito);
 
         personajeService.guardarPersonaje(otroMaguito);
-        Personaje maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.getId()).get();
+        Personaje maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.getId());
         Assertions.assertFalse(maguitoRecuperado.getInventario().isEmpty());
     }
 
     @Test
     public void testMergeTransientEnCascadaNoFalla() {
-        Personaje otroMaguito = new Personaje("Shierke");
-        otroMaguito.setPesoMaximo(70);
-        otroMaguito.setVida(10);
+        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
+
         personajeService.guardarPersonaje(otroMaguito);
 
         Item espada = new Item("Espada", 100);
@@ -198,9 +184,7 @@ public class InventarioServiceTest {
         mismaEspada.setNombre("Espada Gastada");
         inventarioService.guardarItem(mismaEspada);
 
-        Personaje otroMaguito = new Personaje("Shierke");
-        otroMaguito.setPesoMaximo(70);
-        otroMaguito.setVida(10);
+        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
 
         personajeService.guardarPersonaje(otroMaguito);
 
@@ -209,13 +193,13 @@ public class InventarioServiceTest {
 
         personajeService.guardarPersonaje(otroMaguito);
 
-        Personaje maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.getId()).get();
+        Personaje maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.getId());
         Assertions.assertEquals("Espada Gastada", maguitoRecuperado.getInventario().iterator().next().getNombre());
     }
 
-    @AfterEach
-    public void tearDown() {
-        inventarioService.clearAll();
-        personajeService.clearAll();
-    }
+//    @AfterEach
+//    public void tearDown() {
+//        inventarioService.clearAll();
+//        personajeService.clearAll();
+//    }
 }

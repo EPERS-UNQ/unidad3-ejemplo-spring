@@ -4,25 +4,23 @@ import ar.edu.unq.spring.controller.dto.ItemDTO;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/inventario")
-public class InventarioControllerREST {
-
+final public class InventarioControllerREST {
     private final InventarioService inventarioService;
-
     public InventarioControllerREST(InventarioService inventarioService) {
         this.inventarioService = inventarioService;
     }
 
-    @GetMapping("/allItems")
-    public List<ItemDTO> allItems() {
+    @GetMapping("/all")
+    public Set<ItemDTO> allItems() {
         return inventarioService.allItems().stream()
                 .map(ItemDTO::desdeModelo)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @GetMapping("/heaviestItem")
@@ -31,17 +29,17 @@ public class InventarioControllerREST {
     }
 
     @GetMapping("/masPesados/{peso}")
-    public List<ItemDTO> getMasPesados(@PathVariable int peso) {
+    public Set<ItemDTO> getMasPesados(@PathVariable int peso) {
         return inventarioService.getMasPesados(peso).stream()
                 .map(ItemDTO::desdeModelo)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @GetMapping("/itemsPersonajesDebiles/{vida}")
-    public List<ItemDTO> getItemsPersonajesDebiles(@PathVariable int vida) {
+    public Set<ItemDTO> getItemsPersonajesDebiles(@PathVariable int vida) {
         return inventarioService.getItemsPersonajesDebiles(vida).stream()
                 .map(ItemDTO::desdeModelo)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @PostMapping

@@ -2,11 +2,11 @@ package ar.edu.unq.spring.service.interfaces;
 
 import ar.edu.unq.spring.modelo.Personaje;
 
-import java.util.Optional;
+import java.util.Set;
 
 public interface PersonajeService {
-    Iterable<Personaje> allPersonajes();
+    Set<Personaje> allPersonajes();
     void guardarPersonaje(Personaje personaje);
-    Optional<Personaje> recuperarPersonaje(Long personajeId);
+    Personaje recuperarPersonaje(Long personajeId);
     void clearAll();
 }
