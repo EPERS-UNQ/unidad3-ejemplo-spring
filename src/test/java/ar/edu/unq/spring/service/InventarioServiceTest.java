@@ -6,6 +6,7 @@ import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -197,9 +198,9 @@ public class InventarioServiceTest {
         Assertions.assertEquals("Espada Gastada", maguitoRecuperado.getInventario().iterator().next().getNombre());
     }
 
-//    @AfterEach
-//    public void tearDown() {
-//        inventarioService.clearAll();
-//        personajeService.clearAll();
-//    }
+    @AfterEach
+    public void tearDown() {
+        inventarioService.clearAll();
+        personajeService.clearAll();
+    }
 }
