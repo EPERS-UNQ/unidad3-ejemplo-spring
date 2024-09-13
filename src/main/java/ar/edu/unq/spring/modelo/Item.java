@@ -22,7 +22,6 @@ public class Item {
     private int peso;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
     private Personaje owner;
 
     public Item(String nombre, int peso) {
