@@ -23,7 +23,7 @@ final public class InventarioControllerREST {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping("/heaviestItem")
+    @GetMapping("/itemMasPesado")
     public ItemDTO heaviestItem() {
         return ItemDTO.desdeModelo(inventarioService.heaviestItem());
     }
@@ -47,7 +47,7 @@ final public class InventarioControllerREST {
         inventarioService.guardarItem(item.aModelo());
     }
 
-    @PutMapping("/recoger/{personajeId}/{itemId}")
+    @PutMapping("/personaje/{personajeId}/recoger/item/{itemId}")
     public void recoger(@PathVariable Long personajeId, @PathVariable Long itemId) {
         inventarioService.recoger(personajeId, itemId);
     }
