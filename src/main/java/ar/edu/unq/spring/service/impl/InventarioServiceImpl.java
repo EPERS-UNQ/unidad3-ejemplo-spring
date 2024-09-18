@@ -5,11 +5,13 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.persistence.ItemDAO;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -21,6 +23,9 @@ public class InventarioServiceImpl implements InventarioService {
         this.personajeDAO = personajeDAO;
         this.itemDAO = itemDAO;
     }
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Item getItem(Long itemId) {
@@ -39,6 +44,7 @@ public class InventarioServiceImpl implements InventarioService {
 
     @Override
     public Item guardarItem(Item item) {
+        System.out.println(entityState("Pre guardado, dentro de la sesion", item));
         return itemDAO.save(item);
     }
 
@@ -72,5 +78,17 @@ public class InventarioServiceImpl implements InventarioService {
     @Override
     public void deleteItem(Item item) {
         itemDAO.delete(item);
+    }
+
+    @Override
+    public String entityState(String moment, Item item) {
+        Session session = entityManager.unwrap(Session.class);
+        if (session.contains(item)) {
+            return "[" + moment + "]" + " | <PERSISTED> | " + item.getNombre();
+        } else if (item.getId() == null) {
+            return "[" + moment + "]" + " | <TRANSIENT> | " + item.getNombre();
+        } else {
+            return "[" + moment + "]" + " | <DETACHED> | " + item.getNombre();
+        }
     }
 }

@@ -4,6 +4,9 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,9 @@ public class PersonajeServiceImpl implements PersonajeService {
         this.personajeDAO = personajeDAO;
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public Set<Personaje> allPersonajes() {
         return Set.copyOf(personajeDAO.findAll());
@@ -28,6 +34,7 @@ public class PersonajeServiceImpl implements PersonajeService {
     @Override
     public void guardarPersonaje(Personaje personaje) {
         try {
+            System.out.println(entityState("Pre guardado, dentro de la sesión", personaje));
             personajeDAO.save(personaje);
         } catch (DataIntegrityViolationException e) {
             throw new NombreDePersonajeRepetido(personaje.getNombre());
@@ -42,5 +49,17 @@ public class PersonajeServiceImpl implements PersonajeService {
     @Override
     public void clearAll() {
         personajeDAO.deleteAll();
+    }
+
+    @Override
+    public String entityState(String moment, Personaje personaje) {
+        Session session = entityManager.unwrap(Session.class);
+        if (session.contains(personaje)) {
+            return "[" + moment + "]" + " | <PERSISTED> | " + personaje.getNombre();
+        } else if (personaje.getId() == null) {
+            return "[" + moment + "]" + " | <TRANSIENT> | " + personaje.getNombre();
+        } else {
+            return "[" + moment + "]" + " | <DETACHED> | " + personaje.getNombre();
+        }
     }
 }

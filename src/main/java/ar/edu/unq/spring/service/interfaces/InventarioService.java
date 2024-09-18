@@ -12,6 +12,7 @@ public interface InventarioService {
     void recoger(Long personajeId, Long itemId);
     Collection<Item> getMasPesados(int peso);
     Collection<Item> getItemsPersonajesDebiles(int vida);
+    String entityState(String moment, Item item);
     void clearAll();
     void deleteItem(Item item);
 }

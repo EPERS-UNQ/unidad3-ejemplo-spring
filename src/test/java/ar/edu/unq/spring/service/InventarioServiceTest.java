@@ -33,16 +33,16 @@ public class InventarioServiceTest {
 
     @BeforeEach
     public void prepare() {
-        tunica = new Item("Tunica", 100);
-        baculo = new Item("Baculo", 50);
-
-        maguin = new Personaje("Maguin", 10, 70);
-        debilucho = new Personaje("Debilucho", 1, 1000);
-
-        inventarioService.guardarItem(tunica);
-        inventarioService.guardarItem(baculo);
-        personajeService.guardarPersonaje(maguin);
-        personajeService.guardarPersonaje(debilucho);
+//        tunica = new Item("Tunica", 100);
+//        baculo = new Item("Baculo", 50);
+//
+//        maguin = new Personaje("Maguin", 10, 70);
+//        debilucho = new Personaje("Debilucho", 1, 1000);
+//
+//        inventarioService.guardarItem(tunica);
+//        inventarioService.guardarItem(baculo);
+//        personajeService.guardarPersonaje(maguin);
+//        personajeService.guardarPersonaje(debilucho);
     }
 
     @Test
@@ -116,6 +116,7 @@ public class InventarioServiceTest {
     public void testPersistEnCascadeAUnaDetachedEntityLanzaDetachedEntityItemException() {
         Item espada = new Item("Espada", 100);
         inventarioService.guardarItem(espada);
+            System.out.println(inventarioService.entityState("Post guardado de la espada", espada));
 
         Personaje otroMaguito = new Personaje("Shierke", 10, 70);
 
@@ -123,6 +124,7 @@ public class InventarioServiceTest {
         espada.setOwner(otroMaguito);
 
         InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+            System.out.println(inventarioService.entityState("Pre llamado de guardarPersonaje", espada));
             personajeService.guardarPersonaje(otroMaguito);
         });
         Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.getMessage());
@@ -173,6 +175,7 @@ public class InventarioServiceTest {
         espada.setOwner(otroMaguito);
 
         personajeService.guardarPersonaje(otroMaguito);
+        // hace .merge al mago, .persist al item
     }
 
     @Transactional

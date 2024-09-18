@@ -8,5 +8,6 @@ public interface PersonajeService {
     Set<Personaje> allPersonajes();
     void guardarPersonaje(Personaje personaje);
     Personaje recuperarPersonaje(Long personajeId);
+    String entityState(String moment, Personaje personaje);
     void clearAll();
 }
