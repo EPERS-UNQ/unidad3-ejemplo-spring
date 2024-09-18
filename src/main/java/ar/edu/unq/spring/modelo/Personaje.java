@@ -1,35 +1,23 @@
 package ar.edu.unq.spring.modelo;
 
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Setter
 @Getter
-@ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-@Entity
+@Setter
 public class Personaje {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 500, unique = true)
     private String nombre;
     private int vida;
     private int pesoMaximo;
-
-    @OneToMany(
-            mappedBy = "owner",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
-    )
     private Set<Item> inventario = new HashSet<>();
+
+    public Personaje() {}
 
     public Personaje(String nombre, int vida, int pesoMaximo) {
         this.nombre = nombre;
@@ -42,12 +30,12 @@ public class Personaje {
     }
 
     public void recoger(Item item) {
-        int pesoActual = getPesoActual();
+        int pesoActual = this.getPesoActual();
         if (pesoActual + item.getPeso() > this.pesoMaximo) {
             throw new MuchoPesoException(this, item);
         }
+
         this.inventario.add(item);
         item.setOwner(this);
     }
-
 }

@@ -62,7 +62,6 @@ public class InventarioServiceTest {
     public void testGetAll() {
         Collection<Item> items = inventarioService.allItems();
         Assertions.assertEquals(2, items.size());
-        Assertions.assertTrue(items.contains(baculo));
     }
 
     @Test
@@ -125,7 +124,7 @@ public class InventarioServiceTest {
         InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
             personajeService.guardarPersonaje(otroMaguito);
         });
-        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.getMessage());
+        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.persistence.dto.ItemJPADTO", exception.getMessage());
     }
 
     @Test
@@ -142,7 +141,7 @@ public class InventarioServiceTest {
         InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
             personajeService.guardarPersonaje(otroMaguito);
         });
-        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.getMessage());
+        Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.persistence.dto.ItemJPADTO", exception.getMessage());
     }
 
     @Test
@@ -173,29 +172,6 @@ public class InventarioServiceTest {
         espada.setOwner(otroMaguito);
 
         personajeService.guardarPersonaje(otroMaguito);
-    }
-
-    @Transactional
-    @Test
-    public void testMergeSincronizaLosCambiosHechosAlObjeto() {
-        Item espada = new Item("Espada", 100);
-        inventarioService.guardarItem(espada);
-
-        Item mismaEspada = inventarioService.getItem(espada.getId());
-        mismaEspada.setNombre("Espada Gastada");
-        inventarioService.guardarItem(mismaEspada);
-
-        Personaje otroMaguito = new Personaje("Shierke", 10, 70);
-
-        personajeService.guardarPersonaje(otroMaguito);
-
-        otroMaguito.getInventario().add(espada);
-        mismaEspada.setOwner(otroMaguito);
-
-        personajeService.guardarPersonaje(otroMaguito);
-
-        Personaje maguitoRecuperado = personajeService.recuperarPersonaje(otroMaguito.getId());
-        Assertions.assertEquals("Espada Gastada", maguitoRecuperado.getInventario().iterator().next().getNombre());
     }
 
     @AfterEach

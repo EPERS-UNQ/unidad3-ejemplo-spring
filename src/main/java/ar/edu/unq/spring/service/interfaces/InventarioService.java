@@ -8,7 +8,7 @@ public interface InventarioService {
     Item getItem(Long itemId);
     Collection<Item> allItems();
     Item heaviestItem();
-    Item guardarItem(Item item);
+    Long guardarItem(Item item);
     void recoger(Long personajeId, Long itemId);
     Collection<Item> getMasPesados(int peso);
     Collection<Item> getItemsPersonajesDebiles(int vida);

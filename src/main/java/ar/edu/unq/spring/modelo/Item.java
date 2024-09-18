@@ -1,32 +1,28 @@
 package ar.edu.unq.spring.modelo;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-@ToString
-@Setter
+import java.util.Objects;
+
 @Getter
-@EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-@Entity
+@Setter
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String nombre;
-
     private int peso;
-
-    @ManyToOne
     private Personaje owner;
+
+    public Item() {}
 
     public Item(String nombre, int peso) {
         this.nombre = nombre;
         this.peso = peso;
     }
 
+    @Override
+    public String toString() {
+        return nombre != null ? nombre : "";
+    }
 }

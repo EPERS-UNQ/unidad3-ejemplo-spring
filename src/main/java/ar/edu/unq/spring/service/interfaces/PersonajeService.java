@@ -6,7 +6,7 @@ import java.util.Set;
 
 public interface PersonajeService {
     Set<Personaje> allPersonajes();
-    void guardarPersonaje(Personaje personaje);
+    Long guardarPersonaje(Personaje personaje);
     Personaje recuperarPersonaje(Long personajeId);
     void clearAll();
 }
