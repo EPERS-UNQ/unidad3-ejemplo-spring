@@ -3,6 +3,7 @@ package ar.edu.unq.spring.controller;
 import ar.edu.unq.spring.controller.dto.PersonajeDTO;
 import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,8 @@ public final class PersonajeControllerREST {
     }
 
     @PostMapping
-    public void createPersonaje(@RequestBody PersonajeDTO personaje) {
-        personajeService.guardarPersonaje(personaje.aModelo());
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Long createPersonaje(@RequestBody PersonajeDTO personaje) {
+       return personajeService.guardarPersonaje(personaje.aModelo());
     }
 }

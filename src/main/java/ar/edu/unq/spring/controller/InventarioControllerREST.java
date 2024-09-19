@@ -43,8 +43,8 @@ final public class InventarioControllerREST {
     }
 
     @PostMapping
-    public void guardarItem(@RequestBody ItemDTO item) {
-        inventarioService.guardarItem(item.aModelo());
+    public Long guardarItem(@RequestBody ItemDTO item) {
+        return inventarioService.guardarItem(item.aModelo());
     }
 
     @PutMapping("/personaje/{personajeId}/recoger/item/{itemId}")
