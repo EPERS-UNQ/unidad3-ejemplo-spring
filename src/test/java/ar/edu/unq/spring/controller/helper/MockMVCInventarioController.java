@@ -42,6 +42,10 @@ public class MockMVCInventarioController {
     }
 
     public Long guardarItem(Item item) throws Exception {
+        return guardarItem(item, HttpStatus.CREATED);
+    }
+
+    private Long guardarItem(Item item, HttpStatus expectedStatus) throws Exception {
         var dto = ItemDTO.desdeModelo(item);
         var json = objectMapper.writeValueAsString(dto);
 
@@ -49,13 +53,13 @@ public class MockMVCInventarioController {
                 mockMvc.perform(MockMvcRequestBuilders.post("/inventario")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
-                        .andExpect(MockMvcResultMatchers.status().isOk())
+                        .andExpect(MockMvcResultMatchers.status().is(expectedStatus.value()))
                         .andReturn().getResponse().getContentAsString()
         );
     }
 
-    public Collection<Item> allItems() throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/inventario/all"))
+    public Collection<Item> allItems() throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/inventario/all"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -67,17 +71,13 @@ public class MockMVCInventarioController {
         return dtos.stream().map(ItemDTO::aModelo).toList();
     }
 
-    public void recoger(Long personajeId, Long itemId) throws Exception {
-        recoger(personajeId, itemId, HttpStatus.OK);
-    }
-
-    private void recoger(Long personajeId, Long itemId, HttpStatus expectedStatus) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/inventario/personaje/" + personajeId + "/recoger/item/" + itemId))
+    public void recoger(Long personajeId, Long itemId, HttpStatus expectedStatus) throws Throwable {
+        performRequest(MockMvcRequestBuilders.put("/inventario/personaje/" + personajeId + "/recoger/item/" + itemId))
                 .andExpect(MockMvcResultMatchers.status().is(expectedStatus.value()));
     }
 
-    public Item heaviestItem() throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/inventario/itemMasPesado"))
+    public Item heaviestItem() throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/inventario/itemMasPesado"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -85,8 +85,8 @@ public class MockMVCInventarioController {
         return dto.aModelo();
     }
 
-    public Collection<Item> getMasPesados(int peso) throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/inventario/masPesados/" + peso))
+    public Collection<Item> getMasPesados(int peso) throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/inventario/masPesados/" + peso))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -98,8 +98,8 @@ public class MockMVCInventarioController {
         return dtos.stream().map(ItemDTO::aModelo).toList();
     }
 
-    public Collection<Item> getItemsPersonajesDebiles(int vida) throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/inventario/itemsPersonajesDebiles/" + vida))
+    public Collection<Item> getItemsPersonajesDebiles(int vida) throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/inventario/itemsPersonajesDebiles/" + vida))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 

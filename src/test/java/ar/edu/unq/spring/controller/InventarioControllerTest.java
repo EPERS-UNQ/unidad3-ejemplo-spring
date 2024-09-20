@@ -1,27 +1,31 @@
 package ar.edu.unq.spring.controller;
 
 import ar.edu.unq.spring.controller.helper.MockMVCInventarioController;
+import ar.edu.unq.spring.controller.helper.MockMVCPersonajeController;
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.modelo.Personaje;
+import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
+import ar.edu.unq.spring.service.interfaces.PersonajeService;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class InventarioControllerTest {
 
     @Autowired
     private InventarioService inventarioService;
 
     @Autowired
-    private MockMVCInventarioController mockMVCController;
+    private PersonajeService personajeService;
+
+    @Autowired
+    private MockMVCInventarioController mockMVCInventarioController;
+
+    @Autowired
+    private MockMVCPersonajeController mockMVCPersonajeController;
 
     private Long maguinId;
     private Long debiluchoId;
@@ -29,24 +33,31 @@ public class InventarioControllerTest {
     private Long baculoId;
 
     @BeforeEach
-    public void prepare() throws Exception {
-        var tunica = new Item("Tunica", 10);
+    public void prepare() throws Throwable {
+        var tunica = new Item("Tunica", 20);
         var baculo = new Item("Baculo", 50);
 
         var maguin = new Personaje("Maguin", 70, 100);
-        var debilucho = new Personaje("Debilucho", 10, 100);
+        var debilucho = new Personaje("Debilucho", 10, 60);
 
-        maguinId = mockMVCController.guardarPersonaje(maguin, HttpStatus.CREATED);
-        debiluchoId = mockMVCController.guardarPersonaje(debilucho, HttpStatus.CREATED);
-        tunicaId = mockMVCController.guardarItem(tunica);
-        baculoId = mockMVCController.guardarItem(baculo);
+        maguinId = mockMVCPersonajeController.guardarPersonaje(maguin);
+        debiluchoId = mockMVCPersonajeController.guardarPersonaje(debilucho);
+        tunicaId = mockMVCInventarioController.guardarItem(tunica);
+        baculoId = mockMVCInventarioController.guardarItem(baculo);
     }
 
     @Test
-    public void testRecoger() throws Exception {
-        mockMVCController.recoger(maguinId, baculoId);
+    public void testGetAllItems() throws Throwable {
+        var items = mockMVCInventarioController.allItems();
 
-        var maguito = mockMVCController.recuperarPersonaje(maguinId);
+        Assertions.assertEquals(2, items.size());
+    }
+
+    @Test
+    public void testRecoger() throws Throwable {
+        mockMVCInventarioController.recoger(maguinId, baculoId, HttpStatus.OK);
+
+        var maguito = mockMVCPersonajeController.recuperarPersonaje(maguinId);
         Assertions.assertEquals("Maguin", maguito.getNombre());
 
         Assertions.assertEquals(1, maguito.getInventario().size());
@@ -57,8 +68,21 @@ public class InventarioControllerTest {
         Assertions.assertSame(baculo.getOwner(), maguito);
     }
 
+    @Test
+    public void testMuchoPesoException() throws Throwable {
+        mockMVCInventarioController.recoger(debiluchoId, baculoId, HttpStatus.OK);
+
+        var exception = Assertions.assertThrows(MuchoPesoException.class, () -> {
+            mockMVCInventarioController.recoger(debiluchoId, tunicaId, HttpStatus.BAD_REQUEST);
+        });
+
+        Assertions.assertEquals("El personaje [Debilucho] no puede recoger [Tunica] porque cagar mucho peso ya",
+                exception.getMessage());
+    }
+
     @AfterEach
     public void cleanUp() {
         inventarioService.clearAll();
+        personajeService.clearAll();
     }
 }

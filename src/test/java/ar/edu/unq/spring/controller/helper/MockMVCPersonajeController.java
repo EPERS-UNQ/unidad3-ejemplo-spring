@@ -16,9 +16,11 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 // Con @Component le decimos a Spring que inicialice este objeto y lo agregue a su contexto
 // Por lo que queda disponible para ser Autowired en otros lugares
@@ -42,12 +44,12 @@ public class MockMVCPersonajeController {
         }
     }
 
-    public Long guardarPersonaje(Personaje personaje, HttpStatus expectedStatus) throws Exception {
+    private Long guardarPersonaje(Personaje personaje, HttpStatus expectedStatus) throws Throwable {
         var dto = PersonajeDTO.desdeModelo(personaje);
         var json = objectMapper.writeValueAsString(dto);
 
         return Long.parseLong(
-                mockMvc.perform(MockMvcRequestBuilders.post("/personaje")
+                performRequest(MockMvcRequestBuilders.post("/personaje")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(json))
                         .andExpect(MockMvcResultMatchers.status().is(expectedStatus.value()))
@@ -55,8 +57,12 @@ public class MockMVCPersonajeController {
         );
     }
 
-    public Personaje recuperarPersonaje(Long personajeId) throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/personaje/" + personajeId))
+    public Long guardarPersonaje(Personaje personaje) throws Throwable {
+        return guardarPersonaje(personaje, HttpStatus.CREATED);
+    }
+
+    public Personaje recuperarPersonaje(Long personajeId) throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/personaje/" + personajeId))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -64,12 +70,16 @@ public class MockMVCPersonajeController {
         return dto.aModelo();
     }
 
-    public Set<PersonajeDTO> recuperarTodos() throws Exception {
-        var json = mockMvc.perform(MockMvcRequestBuilders.get("/personaje/all"))
+    public Collection<Personaje> recuperarTodos() throws Throwable {
+        var json = performRequest(MockMvcRequestBuilders.get("/personaje/all"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        var dto = objectMapper.readValue(json, PersonajeDTO[].class);
-        return Set.of(dto);
+        Collection<PersonajeDTO> dtos = objectMapper.readValue(
+                json,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, PersonajeDTO.class)
+        );
+
+        return dtos.stream().map(PersonajeDTO::aModelo).collect(Collectors.toList());
     }
 }
