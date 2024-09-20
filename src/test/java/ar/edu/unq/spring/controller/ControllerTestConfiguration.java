@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 // Una vez ya se hicieron todos los escaneos, hace los autowirings y le pasa por ejemplo el controller al mockMVC que declaramos abajo
 @ComponentScan(basePackages = {"ar.edu.unq.spring"})
-public class InventarioControllerTestConfiguration {
+public class ControllerTestConfiguration {
 
     @Bean
     public ObjectMapper objectMapper() {

@@ -2,6 +2,7 @@ package ar.edu.unq.spring.controller;
 
 import ar.edu.unq.spring.controller.dto.ItemDTO;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -14,6 +15,12 @@ final public class InventarioControllerREST {
     private final InventarioService inventarioService;
     public InventarioControllerREST(InventarioService inventarioService) {
         this.inventarioService = inventarioService;
+    }
+
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Long guardarItem(@RequestBody ItemDTO item) {
+        return inventarioService.guardarItem(item.aModelo());
     }
 
     @GetMapping("/all")
@@ -40,11 +47,6 @@ final public class InventarioControllerREST {
         return inventarioService.getItemsPersonajesDebiles(vida).stream()
                 .map(ItemDTO::desdeModelo)
                 .collect(Collectors.toSet());
-    }
-
-    @PostMapping
-    public Long guardarItem(@RequestBody ItemDTO item) {
-        return inventarioService.guardarItem(item.aModelo());
     }
 
     @PutMapping("/personaje/{personajeId}/recoger/item/{itemId}")

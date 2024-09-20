@@ -19,11 +19,10 @@ public final class PersonajeControllerREST {
         this.personajeService = personajeService;
     }
 
-    @GetMapping
-    public Set<PersonajeDTO> getAllPersonajes() {
-        return personajeService.allPersonajes().stream()
-                .map(PersonajeDTO::desdeModelo)
-                .collect(Collectors.toSet());
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public Long createPersonaje(@RequestBody PersonajeDTO personaje) {
+        return personajeService.guardarPersonaje(personaje.aModelo());
     }
 
     @GetMapping("/{id}")
@@ -32,9 +31,10 @@ public final class PersonajeControllerREST {
         return ResponseEntity.ok(PersonajeDTO.desdeModelo(personaje));
     }
 
-    @PostMapping
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public Long createPersonaje(@RequestBody PersonajeDTO personaje) {
-       return personajeService.guardarPersonaje(personaje.aModelo());
+    @GetMapping("/all")
+    public Set<PersonajeDTO> getAllPersonajes() {
+        return personajeService.allPersonajes().stream()
+                .map(PersonajeDTO::desdeModelo)
+                .collect(Collectors.toSet());
     }
 }
