@@ -33,16 +33,16 @@ public class InventarioServiceTest {
 
     @BeforeEach
     public void prepare() {
-//        tunica = new Item("Tunica", 100);
-//        baculo = new Item("Baculo", 50);
-//
-//        maguin = new Personaje("Maguin", 10, 70);
-//        debilucho = new Personaje("Debilucho", 1, 1000);
-//
-//        inventarioService.guardarItem(tunica);
-//        inventarioService.guardarItem(baculo);
-//        personajeService.guardarPersonaje(maguin);
-//        personajeService.guardarPersonaje(debilucho);
+        tunica = new Item("Tunica", 100);
+        baculo = new Item("Baculo", 50);
+
+        maguin = new Personaje("Maguin", 10, 70);
+        debilucho = new Personaje("Debilucho", 1, 1000);
+
+        inventarioService.guardarItem(tunica);
+        inventarioService.guardarItem(baculo);
+        personajeService.guardarPersonaje(maguin);
+        personajeService.guardarPersonaje(debilucho);
     }
 
     @Test
