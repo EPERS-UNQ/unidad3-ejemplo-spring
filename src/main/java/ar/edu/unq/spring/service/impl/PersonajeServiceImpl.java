@@ -6,7 +6,6 @@ import ar.edu.unq.spring.persistence.ItemDAO;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.PersonajeService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,13 @@ import java.util.Collection;
 
 @Service @Transactional
 public class PersonajeServiceImpl implements PersonajeService {
-    @Autowired private PersonajeDAO personajeDAO;
-    @Autowired private ItemDAO itemDAO;
+    private PersonajeDAO personajeDAO;
+    private ItemDAO itemDAO;
 
+    public PersonajeServiceImpl(PersonajeDAO personajeDAO, ItemDAO itemDAO) {
+        this.personajeDAO = personajeDAO;
+        this.itemDAO = itemDAO;
+    }
 
     @Override
     public void guardarPersonaje(Personaje personaje) {

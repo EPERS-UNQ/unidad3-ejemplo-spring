@@ -4,16 +4,17 @@ import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.persistence.ItemDAO;
 import ar.edu.unq.spring.service.ItemService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
 @Service @Transactional
 public class ItemServiceImpl implements ItemService {
+    private ItemDAO itemDAO;
 
-    @Autowired private ItemDAO itemDAO;
-
+    public ItemServiceImpl(ItemDAO itemDAO) {
+        this.itemDAO = itemDAO;
+    }
 
     @Override
     public void guardarItem(Item item) {
