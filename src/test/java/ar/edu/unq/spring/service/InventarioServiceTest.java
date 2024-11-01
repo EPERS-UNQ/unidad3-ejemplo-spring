@@ -114,7 +114,7 @@ class InventarioServiceTest {
         unBardo.setMana(random.nextInt(400, 1000));
         personajeService.guardarPersonaje(unBardo);
 
-        for (int i = 1; i <= 25000; i++) {
+        for (int i = 1; i <= 30000; i++) {
             Mago unMago = new Mago("Mago-" + i);
             unMago.setPesoMaximo(random.nextInt(200, 300));
             unMago.setVida(random.nextInt(50, 200));
@@ -136,7 +136,7 @@ class InventarioServiceTest {
         unBarbarian.setFuerza(random.nextInt(250, 500));
         personajeService.guardarPersonaje(unBarbarian);
 
-        for (int i = 1; i <= 25000; i++) {
+        for (int i = 1; i <= 30000; i++) {
             Guerrero unGuerrero = new Guerrero("Guerrero-" + i);
             unGuerrero.setPesoMaximo(random.nextInt(500, 900));
             unGuerrero.setVida(random.nextInt(300, 1200));
@@ -152,7 +152,7 @@ class InventarioServiceTest {
         elReyDeLosBandidos.setSigilo(random.nextInt(250, 500));
         personajeService.guardarPersonaje(elReyDeLosBandidos);
 
-        for (int i = 1; i <= 25000; i++) {
+        for (int i = 1; i <= 30000; i++) {
             Picaro unPicaro = new Picaro("Picaro-" + i);
             unPicaro.setPesoMaximo(random.nextInt(50, 125));
             unPicaro.setVida(random.nextInt(100, 150));

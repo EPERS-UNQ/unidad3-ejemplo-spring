@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity @Getter @Setter
 // @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 // @Inheritance(strategy = InheritanceType.JOINED)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Personaje {
 
     @Id
