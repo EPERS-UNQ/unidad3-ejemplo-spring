@@ -5,6 +5,8 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.modelo.clasesDePersonajes.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -16,6 +18,7 @@ import java.util.Random;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class InventarioServiceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(InventarioServiceTest.class);
     @Autowired private PersonajeService personajeService;
     @Autowired private ItemService itemService;
 
@@ -97,8 +100,21 @@ class InventarioServiceTest {
     @Test
     void testGenerarMilesDeDatos() {
         Random random = new Random();
+        log.info("Generando magos...");
 
-        for (int i = 1; i <= 60000; i++) {
+        Mago unNigromante = new Mago("Iancho");
+        unNigromante.setPesoMaximo(random.nextInt(200, 300));
+        unNigromante.setVida(random.nextInt(50, 200));
+        unNigromante.setMana(random.nextInt(400, 1000));
+        personajeService.guardarPersonaje(unNigromante);
+
+        Mago unBardo = new Mago("Fran");
+        unBardo.setPesoMaximo(random.nextInt(200, 300));
+        unBardo.setVida(random.nextInt(50, 200));
+        unBardo.setMana(random.nextInt(400, 1000));
+        personajeService.guardarPersonaje(unBardo);
+
+        for (int i = 1; i <= 25000; i++) {
             Mago unMago = new Mago("Mago-" + i);
             unMago.setPesoMaximo(random.nextInt(200, 300));
             unMago.setVida(random.nextInt(50, 200));
@@ -106,7 +122,21 @@ class InventarioServiceTest {
             personajeService.guardarPersonaje(unMago);
         }
 
-        for (int i = 1; i <= 60000; i++) {
+        log.info("Generando guerreros...");
+
+        Guerrero unPaladin = new Guerrero("Fabi");
+        unPaladin.setPesoMaximo(random.nextInt(50, 125));
+        unPaladin.setVida(random.nextInt(100, 150));
+        unPaladin.setFuerza(random.nextInt(250, 500));
+        personajeService.guardarPersonaje(unPaladin);
+
+        Guerrero unBarbarian = new Guerrero("Luki");
+        unBarbarian.setPesoMaximo(random.nextInt(50, 125));
+        unBarbarian.setVida(random.nextInt(100, 150));
+        unBarbarian.setFuerza(random.nextInt(250, 500));
+        personajeService.guardarPersonaje(unBarbarian);
+
+        for (int i = 1; i <= 25000; i++) {
             Guerrero unGuerrero = new Guerrero("Guerrero-" + i);
             unGuerrero.setPesoMaximo(random.nextInt(500, 900));
             unGuerrero.setVida(random.nextInt(300, 1200));
@@ -114,7 +144,15 @@ class InventarioServiceTest {
             personajeService.guardarPersonaje(unGuerrero);
         }
 
-        for (int i = 1; i <= 60000; i++) {
+        log.info("Generando picaros...");
+
+        Picaro elReyDeLosBandidos = new Picaro("Valentin");
+        elReyDeLosBandidos.setPesoMaximo(random.nextInt(50, 125));
+        elReyDeLosBandidos.setVida(random.nextInt(100, 150));
+        elReyDeLosBandidos.setSigilo(random.nextInt(250, 500));
+        personajeService.guardarPersonaje(elReyDeLosBandidos);
+
+        for (int i = 1; i <= 25000; i++) {
             Picaro unPicaro = new Picaro("Picaro-" + i);
             unPicaro.setPesoMaximo(random.nextInt(50, 125));
             unPicaro.setVida(random.nextInt(100, 150));
