@@ -1,7 +1,7 @@
-package ar.edu.unq.spring.application.service;
+package ar.edu.unq.spring.application.adapter.service;
 
-import ar.edu.unq.spring.application.port.input.InventarioUseCase;
-import ar.edu.unq.spring.application.port.input.PersonajeUseCase;
+import ar.edu.unq.spring.application.port.input.*;
+import ar.edu.unq.spring.application.port.input.ObtenerPersonajePorIdUseCase;
 import ar.edu.unq.spring.domain.model.Item;
 import ar.edu.unq.spring.domain.model.exception.MuchoPesoException;
 import ar.edu.unq.spring.domain.model.exception.NombreDePersonajeRepetidoException;
@@ -19,10 +19,22 @@ import java.util.List;
 public class InventarioServiceTest {
 
     @Autowired
-    private InventarioUseCase inventarioUseCase;
-
+    private CrearItemUseCase crearItemUseCase;
+    
     @Autowired
-    private PersonajeUseCase personajeUseCase;
+    private ObtenerInventarioDePersonajeUseCase obtenerInventarioDePersonajeUseCase;
+    
+    @Autowired
+    private AgregarItemAPersonajeUseCase agregarItemAPersonajeUseCase;
+    
+    @Autowired
+    private CrearPersonajeUseCase crearPersonajeUseCase;
+    
+    @Autowired
+    private ObtenerPersonajePorIdUseCase obtenerPersonajePorIdUseCase;
+    
+    @Autowired
+    private EliminarTodosLosPersonajesUseCase eliminarTodosLosPersonajesUseCase;
 
     private Personaje maguin;
     private Personaje debilucho;
@@ -31,18 +43,18 @@ public class InventarioServiceTest {
 
     @BeforeEach
     public void prepararTest() {
-        tunica = inventarioUseCase.crearItem(new Item("Tunica", 100));
-        baculo = inventarioUseCase.crearItem(new Item("Baculo", 50));
+        tunica = crearItemUseCase.ejecutar(new Item("Tunica", 100));
+        baculo = crearItemUseCase.ejecutar(new Item("Baculo", 50));
         
-        maguin = personajeUseCase.crearPersonaje(new Personaje("Maguin", 10, 70));
-        debilucho = personajeUseCase.crearPersonaje(new Personaje("Debilucho", 1, 1000));
+        maguin = crearPersonajeUseCase.ejecutar(new Personaje("Maguin", 10, 70));
+        debilucho = crearPersonajeUseCase.ejecutar(new Personaje("Debilucho", 1, 1000));
     }
 
     @Test
     public void testRecogerItem() {
-        inventarioUseCase.agregarItemAPersonaje(maguin.getId(), baculo);
+        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
 
-        Personaje maguinActualizado = personajeUseCase.obtenerPersonajePorId(maguin.getId());
+        Personaje maguinActualizado = obtenerPersonajePorIdUseCase.ejecutar(maguin.getId());
         Assertions.assertEquals("Maguin", maguinActualizado.getNombre());
         Assertions.assertEquals(1, maguinActualizado.getInventario().size());
 
@@ -54,12 +66,12 @@ public class InventarioServiceTest {
     @Test
     public void testObtenerTodosLosItems() {
         // Primero agregamos los items a algún personaje para que estén en el sistema
-        inventarioUseCase.agregarItemAPersonaje(maguin.getId(), baculo);
-        inventarioUseCase.agregarItemAPersonaje(debilucho.getId(), tunica);
+        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
+        agregarItemAPersonajeUseCase.ejecutar(debilucho.getId(), tunica);
         
         // Verificar obtención de inventario
-        List<Item> itemsMaguin = inventarioUseCase.obtenerInventarioDePersonaje(maguin.getId());
-        List<Item> itemsDebilucho = inventarioUseCase.obtenerInventarioDePersonaje(debilucho.getId());
+        List<Item> itemsMaguin = obtenerInventarioDePersonajeUseCase.ejecutar(maguin.getId());
+        List<Item> itemsDebilucho = obtenerInventarioDePersonajeUseCase.ejecutar(debilucho.getId());
         
         Assertions.assertEquals(1, itemsMaguin.size());
         Assertions.assertEquals(1, itemsDebilucho.size());
@@ -68,12 +80,12 @@ public class InventarioServiceTest {
     @Test
     public void testExcepcionPorMuchoPeso() {
         // Añadir el báculo a maguin
-        inventarioUseCase.agregarItemAPersonaje(maguin.getId(), baculo);
+        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
         
         // Intentar añadir la túnica (que pesa 100) debería fallar porque excede el límite
         MuchoPesoException exception = Assertions.assertThrows(
             MuchoPesoException.class, 
-            () -> inventarioUseCase.agregarItemAPersonaje(maguin.getId(), tunica)
+            () -> agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), tunica)
         );
         
         String mensajeError = exception.getMessage();
@@ -88,7 +100,7 @@ public class InventarioServiceTest {
 
         NombreDePersonajeRepetidoException exception = Assertions.assertThrows(
             NombreDePersonajeRepetidoException.class, 
-            () -> personajeUseCase.crearPersonaje(otroMaguin)
+            () -> crearPersonajeUseCase.ejecutar(otroMaguin)
         );
         
         Assertions.assertTrue(exception.getMessage().contains("Maguin"));
@@ -96,7 +108,6 @@ public class InventarioServiceTest {
 
     @AfterEach
     public void limpiarDatos() {
-        // Esto no deberia estar en el useCase, no? Lo dejo aca por comodidad
-        personajeUseCase.eliminarTodosLosPersonajes();
+        eliminarTodosLosPersonajesUseCase.ejecutar();
     }
 } 

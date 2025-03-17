@@ -1,9 +1,12 @@
 package ar.edu.unq.spring.infrastructure.adapter.rest;
 
-import ar.edu.unq.spring.application.port.input.InventarioUseCase;
+import ar.edu.unq.spring.application.port.input.AgregarItemAPersonajeUseCase;
+import ar.edu.unq.spring.application.port.input.ObtenerInventarioDePersonajeUseCase;
+import ar.edu.unq.spring.application.port.input.ObtenerItemPorIdUseCase;
 import ar.edu.unq.spring.domain.model.ItemId;
 import ar.edu.unq.spring.domain.model.PersonajeId;
-import ar.edu.unq.spring.infrastructure.adapter.rest.dto.ItemDTO;
+import ar.edu.unq.spring.infrastructure.adapter.rest.dto.ItemCommunication;
+import ar.edu.unq.spring.infrastructure.adapter.rest.dto.ItemPresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,35 +17,42 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/inventario")
 public class InventarioController {
 
-    private final InventarioUseCase inventarioUseCase;
+    private final ObtenerInventarioDePersonajeUseCase obtenerInventarioDePersonajeUseCase;
+    private final AgregarItemAPersonajeUseCase agregarItemAPersonajeUseCase;
+    private final ObtenerItemPorIdUseCase obtenerItemPorIdUseCase;
 
-    public InventarioController(InventarioUseCase inventarioUseCase) {
-        this.inventarioUseCase = inventarioUseCase;
+    public InventarioController(
+            ObtenerInventarioDePersonajeUseCase obtenerInventarioDePersonajeUseCase,
+            AgregarItemAPersonajeUseCase agregarItemAPersonajeUseCase,
+            ObtenerItemPorIdUseCase obtenerItemPorIdUseCase) {
+        this.obtenerInventarioDePersonajeUseCase = obtenerInventarioDePersonajeUseCase;
+        this.agregarItemAPersonajeUseCase = agregarItemAPersonajeUseCase;
+        this.obtenerItemPorIdUseCase = obtenerItemPorIdUseCase;
     }
 
     @GetMapping("/personaje/{personajeId}")
-    public List<ItemDTO> getInventarioByPersonajeId(@PathVariable Long personajeId) {
-        return inventarioUseCase.obtenerInventarioDePersonaje(PersonajeId.of(personajeId)).stream()
-                .map(ItemDTO::fromDomain)
+    public List<ItemPresentation> getInventarioByPersonajeId(@PathVariable Long personajeId) {
+        return obtenerInventarioDePersonajeUseCase.ejecutar(PersonajeId.of(personajeId)).stream()
+                .map(ItemPresentation::fromDomain)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/personaje/{personajeId}/item")
     public ResponseEntity<Void> addItemToPersonaje(
             @PathVariable Long personajeId,
-            @RequestBody ItemDTO itemDTO) {
-        inventarioUseCase.agregarItemAPersonaje(
+            @RequestBody ItemCommunication itemCommunication) {
+        agregarItemAPersonajeUseCase.ejecutar(
                 PersonajeId.of(personajeId),
-                itemDTO.toDomain()
+                itemCommunication.toDomain()
         );
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/item/{itemId}")
-    public ResponseEntity<ItemDTO> getItemById(@PathVariable Long itemId) {
+    public ResponseEntity<ItemPresentation> getItemById(@PathVariable Long itemId) {
         return ResponseEntity.ok(
-                ItemDTO.fromDomain(
-                        inventarioUseCase.obtenerItemPorId(ItemId.of(itemId))
+                ItemPresentation.fromDomain(
+                        obtenerItemPorIdUseCase.ejecutar(ItemId.of(itemId))
                 )
         );
     }
