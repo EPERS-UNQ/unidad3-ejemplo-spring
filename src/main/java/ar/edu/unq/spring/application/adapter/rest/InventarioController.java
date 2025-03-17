@@ -1,12 +1,12 @@
-package ar.edu.unq.spring.infrastructure.adapter.rest;
+package ar.edu.unq.spring.application.adapter.rest;
 
+import ar.edu.unq.spring.application.adapter.rest.dto.ItemCommunication;
 import ar.edu.unq.spring.application.port.input.AgregarItemAPersonajeUseCase;
 import ar.edu.unq.spring.application.port.input.ObtenerInventarioDePersonajeUseCase;
 import ar.edu.unq.spring.application.port.input.ObtenerItemPorIdUseCase;
 import ar.edu.unq.spring.domain.model.ItemId;
 import ar.edu.unq.spring.domain.model.PersonajeId;
-import ar.edu.unq.spring.infrastructure.adapter.rest.dto.ItemCommunication;
-import ar.edu.unq.spring.infrastructure.adapter.rest.dto.ItemPresentation;
+import ar.edu.unq.spring.application.adapter.rest.dto.ItemPresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

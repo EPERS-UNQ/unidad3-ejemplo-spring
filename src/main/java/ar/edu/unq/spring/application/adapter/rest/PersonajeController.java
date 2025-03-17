@@ -1,12 +1,12 @@
-package ar.edu.unq.spring.infrastructure.adapter.rest;
+package ar.edu.unq.spring.application.adapter.rest;
 
 import ar.edu.unq.spring.application.port.input.CrearPersonajeUseCase;
 import ar.edu.unq.spring.application.port.input.EliminarTodosLosPersonajesUseCase;
 import ar.edu.unq.spring.application.port.input.ObtenerPersonajePorIdUseCase;
 import ar.edu.unq.spring.application.port.input.ObtenerTodosLosPersonajesUseCase;
 import ar.edu.unq.spring.domain.model.PersonajeId;
-import ar.edu.unq.spring.infrastructure.adapter.rest.dto.PersonajeCommunication;
-import ar.edu.unq.spring.infrastructure.adapter.rest.dto.PersonajePresentation;
+import ar.edu.unq.spring.application.adapter.rest.dto.PersonajeCommunication;
+import ar.edu.unq.spring.application.adapter.rest.dto.PersonajePresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
