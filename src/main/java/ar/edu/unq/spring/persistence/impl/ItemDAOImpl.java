@@ -7,7 +7,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,6 @@ public class ItemDAOImpl implements ItemDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional
     @Override
     public Item save(Item item) {
         if (item.getId() == null) {
@@ -31,25 +29,21 @@ public class ItemDAOImpl implements ItemDAO {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Item> findById(Long id) {
         return Optional.ofNullable(entityManager.find(Item.class, id));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Item> findAll() {
         return entityManager.createQuery("from Item", Item.class).getResultList();
     }
 
-    @Transactional
     @Override
     public void deleteAll() {
         entityManager.createQuery("delete from Item").executeUpdate();
     }
 
-    @Transactional
     @Override
     public void delete(Item item) {
         entityManager.createQuery("delete from Item as i where i.id = :i").setParameter("i", item.getId()).executeUpdate();
