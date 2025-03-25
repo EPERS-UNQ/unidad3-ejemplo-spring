@@ -6,6 +6,7 @@ import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
+import org.hibernate.PersistentObjectException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -122,7 +123,7 @@ public class InventarioServiceTest {
         otroMaguito.getInventario().add(espada);
         espada.setOwner(otroMaguito);
 
-        InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+        var exception = Assertions.assertThrows(PersistentObjectException.class, () -> {
             personajeService.guardarPersonaje(otroMaguito);
         });
         Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.getMessage());
@@ -139,7 +140,7 @@ public class InventarioServiceTest {
         otroMaguito.getInventario().add(espada);
         espada.setOwner(otroMaguito);
 
-        InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+        var exception = Assertions.assertThrows(PersistentObjectException.class, () -> {
             personajeService.guardarPersonaje(otroMaguito);
         });
         Assertions.assertEquals("detached entity passed to persist: ar.edu.unq.spring.modelo.Item", exception.getMessage());

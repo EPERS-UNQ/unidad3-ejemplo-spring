@@ -4,7 +4,7 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.PersonajeService;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class PersonajeServiceImpl implements PersonajeService {
     public void guardarPersonaje(Personaje personaje) {
         try {
             personajeDAO.save(personaje);
-        } catch (DataIntegrityViolationException e) {
+        } catch (ConstraintViolationException e) {
             throw new NombreDePersonajeRepetido(personaje.getNombre());
         }
     }
