@@ -1,0 +1,64 @@
+DTOS definidos:
+
+PersonajeDTO: {
+  id: int,
+  nombre: string,
+  vida: int,
+  pesoMaximo: int,
+  inventario: [ItemDTO]
+}
+
+PersonajeRequestDTO {
+    nombre: string,
+    vida: int,
+    pesoMaximo: int
+}
+
+ItemDTO: {
+    id: int,
+    nombre: string,
+    peso: int,
+    ownerId: int
+}
+
+ItemRequestDTO: {
+    nombre: string,
+    peso: int
+}
+
+Endpoints:
+
+- PersonajeControllerREST
+    - Crear nuevo personaje
+        POST /personaje
+        Request: PersonajeRequestDTO
+        Response: PersonajeDTO [Status 201]
+
+    - Obtener personaje por id
+        GET /personaje/{id}
+        Response: PersonajeDTO [Status 200]
+
+    - Obtener todos los personajes
+            GET /personaje
+            Response: [PersonajeDTO] [Status 200]
+
+
+- InventarioControllerREST
+    - Crear nuevo item
+        POST /inventario
+        Request: ItemRequestDTO
+        Response: ItemDTO [Status 201]
+
+    - Obtener item por id
+        GET /inventario/{id}
+        Response: ItemDTO [Status 200]
+
+    - Obtener todos los items
+        GET /inventario
+        Response: [ItemDTO] [Status 200]
+
+    - Recoger item
+        PUT /inventario/personaje/{personajeId}/recoger/item/{itemId}
+        Response: [Status 200]
+
+
