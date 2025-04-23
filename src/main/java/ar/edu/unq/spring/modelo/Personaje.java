@@ -9,13 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity @Getter @Setter
-// @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-// @Inheritance(strategy = InheritanceType.JOINED)
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Personaje {
-
+public class Personaje {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false, length = 500)

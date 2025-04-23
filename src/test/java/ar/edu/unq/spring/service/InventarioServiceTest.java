@@ -2,15 +2,20 @@ package ar.edu.unq.spring.service;
 
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.modelo.Personaje;
-import ar.edu.unq.spring.modelo.clasesDePersonajes.*;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.sql.DataSource;
+import java.io.IOException;
 import java.util.Random;
 
 @ExtendWith(SpringExtension.class)
@@ -26,17 +31,19 @@ class InventarioServiceTest {
     private Personaje debilucho;
     private Item baculo;
     private Item tunica;
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @BeforeEach
     void prepare() {
         tunica = new Item("Tunica", 100);
         baculo = new Item("Baculo", 50);
 
-        maguin = new Mago("Maguin");
+        maguin = new Personaje("Maguin");
         maguin.setPesoMaximo(70);
         maguin.setVida(10);
 
-        debilucho = new Guerrero("Debilucho");
+        debilucho = new Personaje("Debilucho");
         debilucho.setPesoMaximo(1000);
         debilucho.setVida(1);
 
@@ -100,65 +107,52 @@ class InventarioServiceTest {
     @Test
     void testGenerarMilesDeDatos() {
         Random random = new Random();
-        log.info("Generando magos...");
-
-        Mago unNigromante = new Mago("Iancho");
-        unNigromante.setPesoMaximo(random.nextInt(200, 300));
-        unNigromante.setVida(random.nextInt(50, 200));
-        unNigromante.setMana(random.nextInt(400, 1000));
-        personajeService.guardarPersonaje(unNigromante);
-
-        Mago unBardo = new Mago("Fran");
-        unBardo.setPesoMaximo(random.nextInt(200, 300));
-        unBardo.setVida(random.nextInt(50, 200));
-        unBardo.setMana(random.nextInt(400, 1000));
-        personajeService.guardarPersonaje(unBardo);
-
-        for (int i = 1; i <= 30000; i++) {
-            Mago unMago = new Mago("Mago-" + i);
+        generarEPERs();
+        for (int i = 1; i <= 200000; i++) {
+            Personaje unMago = new Personaje("NPC-" + i);
             unMago.setPesoMaximo(random.nextInt(200, 300));
             unMago.setVida(random.nextInt(50, 200));
-            unMago.setMana(random.nextInt(400, 1000));
             personajeService.guardarPersonaje(unMago);
         }
+    }
 
-        log.info("Generando guerreros...");
+    private void generarEPERs() {
+        Random random = new Random();
 
-        Guerrero unPaladin = new Guerrero("Fabi");
+        Personaje unNigromante = new Personaje("Iancho");
+        unNigromante.setPesoMaximo(random.nextInt(200, 300));
+        unNigromante.setVida(random.nextInt(50, 200));
+        personajeService.guardarPersonaje(unNigromante);
+
+        Personaje unBardo = new Personaje("Fran");
+        unBardo.setPesoMaximo(random.nextInt(200, 300));
+        unBardo.setVida(random.nextInt(50, 200));
+        personajeService.guardarPersonaje(unBardo);
+
+        Personaje unPaladin = new Personaje("Fabi");
         unPaladin.setPesoMaximo(random.nextInt(50, 125));
         unPaladin.setVida(random.nextInt(100, 150));
-        unPaladin.setFuerza(random.nextInt(250, 500));
         personajeService.guardarPersonaje(unPaladin);
 
-        Guerrero unBarbarian = new Guerrero("Luki");
+        Personaje unBarbarian = new Personaje("Luki");
         unBarbarian.setPesoMaximo(random.nextInt(50, 125));
         unBarbarian.setVida(random.nextInt(100, 150));
-        unBarbarian.setFuerza(random.nextInt(250, 500));
         personajeService.guardarPersonaje(unBarbarian);
 
-        for (int i = 1; i <= 30000; i++) {
-            Guerrero unGuerrero = new Guerrero("Guerrero-" + i);
-            unGuerrero.setPesoMaximo(random.nextInt(500, 900));
-            unGuerrero.setVida(random.nextInt(300, 1200));
-            unGuerrero.setFuerza(random.nextInt(350, 675));
-            personajeService.guardarPersonaje(unGuerrero);
-        }
-
-        log.info("Generando picaros...");
-
-        Picaro elReyDeLosBandidos = new Picaro("Valentin");
+        Personaje elReyDeLosBandidos = new Personaje("Valentin");
         elReyDeLosBandidos.setPesoMaximo(random.nextInt(50, 125));
         elReyDeLosBandidos.setVida(random.nextInt(100, 150));
-        elReyDeLosBandidos.setSigilo(random.nextInt(250, 500));
         personajeService.guardarPersonaje(elReyDeLosBandidos);
+    }
 
-        for (int i = 1; i <= 30000; i++) {
-            Picaro unPicaro = new Picaro("Picaro-" + i);
-            unPicaro.setPesoMaximo(random.nextInt(50, 125));
-            unPicaro.setVida(random.nextInt(100, 150));
-            unPicaro.setSigilo(random.nextInt(250, 500));
-            personajeService.guardarPersonaje(unPicaro);
-        }
+    @Test
+    void bootstrap() throws IOException {
+        tearDown();
+        generarEPERs();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
+        var resource = new ClassPathResource("bootstrap.sql");
+        String sql = new String(resource.getInputStream().readAllBytes());
+        jdbcTemplate.execute(sql);
     }
 
     @AfterEach
