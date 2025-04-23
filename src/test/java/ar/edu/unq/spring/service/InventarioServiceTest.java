@@ -157,7 +157,8 @@ class InventarioServiceTest {
 
     @AfterEach
     void tearDown() {
-        personajeService.clearAll();
-        itemService.clearAll();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
+        String sql = "delete from personaje";
+        jdbcTemplate.execute(sql);
     }
 }
