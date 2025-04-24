@@ -16,4 +16,6 @@ public interface ItemRepository {
     Item save(Item item);
     
     List<Item> findByPersonajeId(PersonajeId personajeId);
+
+    void deleteAll();
 } 

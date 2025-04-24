@@ -10,13 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class EliminarTodosLosPersonajesService implements EliminarTodosLosPersonajesUseCase {
 
     private final PersonajeRepository personajeRepository;
+    private final EliminarTodosLosItemsService eliminarTodosLosItemsService;
 
-    public EliminarTodosLosPersonajesService(PersonajeRepository personajeRepository) {
+    public EliminarTodosLosPersonajesService(PersonajeRepository personajeRepository, EliminarTodosLosItemsService eliminarTodosLosItemsService) {
         this.personajeRepository = personajeRepository;
+        this.eliminarTodosLosItemsService = eliminarTodosLosItemsService;
     }
 
     @Override
     public void ejecutar() {
+        eliminarTodosLosItemsService.ejecutar();
         personajeRepository.deleteAll();
     }
 } 

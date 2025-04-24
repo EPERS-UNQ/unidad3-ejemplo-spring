@@ -18,15 +18,12 @@ import java.util.stream.Collectors;
 public class ItemRepositoryAdapter implements ItemRepository {
 
     private final SpringDataItemRepository springDataItemRepository;
-    private final SpringDataPersonajeRepository springDataPersonajeRepository;
     private final ItemMapper itemMapper;
 
     public ItemRepositoryAdapter(
             SpringDataItemRepository springDataItemRepository,
-            SpringDataPersonajeRepository springDataPersonajeRepository,
             ItemMapper itemMapper) {
         this.springDataItemRepository = springDataItemRepository;
-        this.springDataPersonajeRepository = springDataPersonajeRepository;
         this.itemMapper = itemMapper;
     }
 
@@ -55,5 +52,10 @@ public class ItemRepositoryAdapter implements ItemRepository {
         return springDataItemRepository.findByDueñoId(personajeId.value()).stream()
                 .map(itemMapper::toDomain)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAll() {
+        springDataItemRepository.deleteAll();
     }
 } 
