@@ -3,7 +3,6 @@ package ar.edu.unq.spring.service;
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.modelo.Personaje;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -106,15 +105,19 @@ class InventarioServiceTest {
     }
 
     @Test
-    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() throws IOException {
-        this.tearDown();
-
-        this.bootstrapPersonajePesado();
-
+    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() {
         log.info("☝️ >>> Primer Lectura...");
-        personajeService.recuperarPersonaje(5000L);
+        personajeService.recuperarPersonaje(maguin.getId());
         log.info("✌️ >>> Segunda Lectura...");
-        personajeService.recuperarPersonaje(5000L);
+        personajeService.recuperarPersonaje(maguin.getId());
+    }
+
+    @Test
+    void crearPersonajeSuperLooteado() throws IOException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
+        var resource = new ClassPathResource("personajePesado.sql");
+        String sql = new String(resource.getInputStream().readAllBytes());
+        jdbcTemplate.execute(sql);
     }
 
     @Test
@@ -134,14 +137,6 @@ class InventarioServiceTest {
         generarEPERs();
         JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
         var resource = new ClassPathResource("bootstrap.sql");
-        String sql = new String(resource.getInputStream().readAllBytes());
-        jdbcTemplate.execute(sql);
-    }
-
-
-    void bootstrapPersonajePesado() throws IOException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
-        var resource = new ClassPathResource("bootstrapPersonajePesado.sql");
         String sql = new String(resource.getInputStream().readAllBytes());
         jdbcTemplate.execute(sql);
     }
@@ -175,12 +170,9 @@ class InventarioServiceTest {
         personajeService.guardarPersonaje(elReyDeLosBandidos);
     }
 
-    //@AfterEach
+    @AfterEach
     void tearDown() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
-        String sql = "delete from item";
-        jdbcTemplate.execute(sql);
-        sql = "delete from personaje";
-        jdbcTemplate.execute(sql);
+        itemService.clearAll();
+        personajeService.clearAll();
     }
 }

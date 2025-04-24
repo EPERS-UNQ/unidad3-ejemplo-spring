@@ -5,9 +5,9 @@ VALUES (
         5000,
            'PJ_Pesado',
            100,
-           1000000
+           25000
        );
-FOR i IN 1..100000 LOOP
+FOR i IN 1..20000 LOOP
         INSERT INTO item (nombre, peso, owner_id) VALUES(
             'Item_' || i,
             1,
