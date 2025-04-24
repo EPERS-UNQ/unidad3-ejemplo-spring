@@ -3,6 +3,7 @@ package ar.edu.unq.spring.service;
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.modelo.Personaje;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
@@ -105,6 +106,14 @@ class InventarioServiceTest {
     }
 
     @Test
+    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() {
+        log.info("☝️ >>> Primer Lectura...");
+        personajeService.recuperarPersonaje(maguin.getId());
+        log.info("✌️ >>> Segunda Lectura...");
+        personajeService.recuperarPersonaje(maguin.getId());
+    }
+
+    @Test
     void testGenerarMilesDeDatos() {
         Random random = new Random();
         generarEPERs();
@@ -114,6 +123,15 @@ class InventarioServiceTest {
             unMago.setVida(random.nextInt(50, 200));
             personajeService.guardarPersonaje(unMago);
         }
+    }
+
+    @Test
+    void bootstrap() throws IOException {
+        generarEPERs();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
+        var resource = new ClassPathResource("bootstrap.sql");
+        String sql = new String(resource.getInputStream().readAllBytes());
+        jdbcTemplate.execute(sql);
     }
 
     private void generarEPERs() {
@@ -145,17 +163,7 @@ class InventarioServiceTest {
         personajeService.guardarPersonaje(elReyDeLosBandidos);
     }
 
-    @Test
-    void bootstrap() throws IOException {
-        tearDown();
-        generarEPERs();
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
-        var resource = new ClassPathResource("bootstrap.sql");
-        String sql = new String(resource.getInputStream().readAllBytes());
-        jdbcTemplate.execute(sql);
-    }
-
-    @AfterEach
+//    @AfterEach
     void tearDown() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
         String sql = "delete from personaje";

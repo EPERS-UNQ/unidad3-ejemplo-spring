@@ -4,11 +4,13 @@ import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity @Getter @Setter
+@Entity @Getter @Setter @Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Personaje {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
