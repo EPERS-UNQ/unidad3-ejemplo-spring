@@ -163,7 +163,7 @@ class InventarioServiceTest {
         personajeService.guardarPersonaje(elReyDeLosBandidos);
     }
 
-//    @AfterEach
+    @AfterEach
     void tearDown() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
         String sql = "delete from personaje";
