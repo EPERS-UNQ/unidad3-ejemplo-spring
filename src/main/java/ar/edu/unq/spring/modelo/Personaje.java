@@ -22,6 +22,7 @@ public class Personaje {
     private int vida;
     private int pesoMaximo;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Item> inventario = new HashSet<>();
 
