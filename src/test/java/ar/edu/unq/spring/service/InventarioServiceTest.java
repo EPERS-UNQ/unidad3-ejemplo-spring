@@ -106,11 +106,15 @@ class InventarioServiceTest {
     }
 
     @Test
-    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() {
+    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() throws IOException {
+        this.tearDown();
+
+        this.bootstrapPersonajePesado();
+
         log.info("☝️ >>> Primer Lectura...");
-        personajeService.recuperarPersonaje(maguin.getId());
+        personajeService.recuperarPersonaje(5000L);
         log.info("✌️ >>> Segunda Lectura...");
-        personajeService.recuperarPersonaje(maguin.getId());
+        personajeService.recuperarPersonaje(5000L);
     }
 
     @Test
@@ -130,6 +134,14 @@ class InventarioServiceTest {
         generarEPERs();
         JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
         var resource = new ClassPathResource("bootstrap.sql");
+        String sql = new String(resource.getInputStream().readAllBytes());
+        jdbcTemplate.execute(sql);
+    }
+
+
+    void bootstrapPersonajePesado() throws IOException {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
+        var resource = new ClassPathResource("bootstrapPersonajePesado.sql");
         String sql = new String(resource.getInputStream().readAllBytes());
         jdbcTemplate.execute(sql);
     }
@@ -163,10 +175,12 @@ class InventarioServiceTest {
         personajeService.guardarPersonaje(elReyDeLosBandidos);
     }
 
-    @AfterEach
+    //@AfterEach
     void tearDown() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
-        String sql = "delete from personaje";
+        String sql = "delete from item";
+        jdbcTemplate.execute(sql);
+        sql = "delete from personaje";
         jdbcTemplate.execute(sql);
     }
 }
