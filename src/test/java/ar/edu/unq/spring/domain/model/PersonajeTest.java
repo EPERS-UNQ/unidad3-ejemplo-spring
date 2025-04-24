@@ -1,6 +1,8 @@
 package ar.edu.unq.spring.domain.model;
 
-import ar.edu.unq.spring.domain.model.exception.MuchoPesoException;
+import ar.edu.unq.spring.inventario.domain.model.Item;
+import ar.edu.unq.spring.personaje.domain.model.Personaje;
+import ar.edu.unq.spring.personaje.domain.exception.MuchoPesoException;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

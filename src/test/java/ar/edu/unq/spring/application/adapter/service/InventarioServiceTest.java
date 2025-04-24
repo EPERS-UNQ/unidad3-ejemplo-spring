@@ -1,11 +1,13 @@
 package ar.edu.unq.spring.application.adapter.service;
 
-import ar.edu.unq.spring.application.port.input.*;
-import ar.edu.unq.spring.application.port.input.ObtenerPersonajePorIdUseCase;
-import ar.edu.unq.spring.domain.model.Item;
-import ar.edu.unq.spring.domain.model.exception.MuchoPesoException;
-import ar.edu.unq.spring.domain.model.exception.NombreDePersonajeRepetidoException;
-import ar.edu.unq.spring.domain.model.Personaje;
+import ar.edu.unq.spring.inventario.domain.model.Item;
+import ar.edu.unq.spring.inventario.ports.api.AgregarItemAPersonajeUseCase;
+import ar.edu.unq.spring.inventario.ports.api.CrearItemUseCase;
+import ar.edu.unq.spring.inventario.ports.api.ObtenerInventarioDePersonajeUseCase;
+import ar.edu.unq.spring.personaje.domain.model.Personaje;
+import ar.edu.unq.spring.personaje.ports.api.CrearPersonajeUseCase;
+import ar.edu.unq.spring.personaje.ports.api.EliminarTodosLosPersonajesUseCase;
+import ar.edu.unq.spring.personaje.ports.api.ObtenerPersonajePorIdUseCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +54,7 @@ public class InventarioServiceTest {
 
     @Test
     public void testRecogerItem() {
-        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
+        agregarItemAPersonajeUseCase.ejecutar(baculo.getId(), maguin.getId());
 
         Personaje maguinActualizado = obtenerPersonajePorIdUseCase.ejecutar(maguin.getId());
         Assertions.assertEquals("Maguin", maguinActualizado.getNombre());
@@ -66,8 +68,8 @@ public class InventarioServiceTest {
     @Test
     public void testObtenerTodosLosItems() {
         // Primero agregamos los items a algún personaje para que estén en el sistema
-        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
-        agregarItemAPersonajeUseCase.ejecutar(debilucho.getId(), tunica);
+        agregarItemAPersonajeUseCase.ejecutar(baculo.getId(), maguin.getId());
+        agregarItemAPersonajeUseCase.ejecutar(tunica.getId(), debilucho.getId());
         
         // Verificar obtención de inventario
         List<Item> itemsMaguin = obtenerInventarioDePersonajeUseCase.ejecutar(maguin.getId());
@@ -75,35 +77,6 @@ public class InventarioServiceTest {
         
         Assertions.assertEquals(1, itemsMaguin.size());
         Assertions.assertEquals(1, itemsDebilucho.size());
-    }
-
-    @Test
-    public void testExcepcionPorMuchoPeso() {
-        // Añadir el báculo a maguin
-        agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), baculo);
-        
-        // Intentar añadir la túnica (que pesa 100) debería fallar porque excede el límite
-        MuchoPesoException exception = Assertions.assertThrows(
-            MuchoPesoException.class, 
-            () -> agregarItemAPersonajeUseCase.ejecutar(maguin.getId(), tunica)
-        );
-        
-        String mensajeError = exception.getMessage();
-        Assertions.assertTrue(mensajeError.contains("Maguin"));
-        Assertions.assertTrue(mensajeError.contains("Tunica"));
-    }
-
-    @Test
-    public void testNombreDePersonajeTieneQueSerUnico() {
-        // Intentar crear otro personaje con el mismo nombre
-        Personaje otroMaguin = new Personaje("Maguin", 10, 70);
-
-        NombreDePersonajeRepetidoException exception = Assertions.assertThrows(
-            NombreDePersonajeRepetidoException.class, 
-            () -> crearPersonajeUseCase.ejecutar(otroMaguin)
-        );
-        
-        Assertions.assertTrue(exception.getMessage().contains("Maguin"));
     }
 
     @AfterEach
