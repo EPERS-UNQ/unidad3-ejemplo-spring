@@ -54,7 +54,7 @@ class InventarioServiceTest {
     }
 
     @Test
-    void testRecoger() {
+    void testRecoger() throws InterruptedException {
         personajeService.recoger(maguin.getId(), baculo.getId());
 
         Personaje maguito = personajeService.recuperarPersonaje(maguin.getId());
@@ -105,7 +105,7 @@ class InventarioServiceTest {
     }
 
     @Test
-    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() {
+    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() throws InterruptedException {
         log.info("☝️ >>> Primer Lectura...");
         personajeService.recuperarPersonaje(maguin.getId());
         log.info("✌️ >>> Segunda Lectura...");

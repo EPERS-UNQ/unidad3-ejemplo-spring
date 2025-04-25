@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface PersonajeService {
     void guardarPersonaje(Personaje personaje);
-    Personaje recuperarPersonaje(Long personajeId);
+    Personaje recuperarPersonaje(Long personajeId) throws InterruptedException;
     Personaje recuperarPersonajePorNombre(String nombre);
 
     void recoger(Long personajeId, Long itemId);

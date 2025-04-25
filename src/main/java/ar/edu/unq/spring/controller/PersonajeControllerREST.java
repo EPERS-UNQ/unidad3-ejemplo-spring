@@ -22,7 +22,7 @@ public class PersonajeControllerREST {
     }
 
     @GetMapping("/{personajeId}")
-    public PersonajeDTO recuperarPersonaje(@PathVariable Long personajeId) {
+    public PersonajeDTO recuperarPersonaje(@PathVariable Long personajeId) throws InterruptedException {
         return PersonajeDTO.desdeModelo(personajeService.recuperarPersonaje(personajeId));
     }
 

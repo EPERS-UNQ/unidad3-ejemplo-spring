@@ -3,12 +3,10 @@ package ar.edu.unq.spring.modelo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.Objects;
 
-@Entity @Getter @Setter @Cacheable
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Entity @Getter @Setter
 public class Item {
 
     @Id

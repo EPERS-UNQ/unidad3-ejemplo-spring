@@ -29,8 +29,11 @@ public class PersonajeServiceImpl implements PersonajeService {
     }
 
     @Override
-    public Personaje recuperarPersonaje(Long personajeId) {
-        return personajeDAO.findById(personajeId).get();
+    public Personaje recuperarPersonaje(Long personajeId) throws InterruptedException {
+        var personaje = personajeDAO.findById(personajeId).get();
+        /* SIMULACIÓN DE LATENCIA */
+        Thread.sleep(2000);
+        return personaje;
     }
 
     @Override
