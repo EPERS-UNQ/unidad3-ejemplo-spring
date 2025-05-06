@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -105,7 +106,17 @@ class InventarioServiceTest {
     }
 
     @Test
-    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() throws InterruptedException {
+    void recuperarEnVariasTransaccionesLeeLaDBRepetidamente() {
+        /*
+            Con L2 apagada:
+            >> Deberiamos ver la misma query (select Personaje join Item) las dos veces
+            >> Si encapularamos esto en una sola transacción, esperariamos:
+                - ver la query (select Personaje join Item) en el primer llamado, y
+                - NADA en el segundo llamado, ya que trae al Personaje e Items de la caché
+            Con L2 activa, deberiamos ver:la query con el join en el primer llamado,
+            >> Primero la query (select Personaje join Item)
+            >> Y luego la query (select Item where owner.id = ?id)
+         */
         log.info("☝️ >>> Primer Lectura...");
         personajeService.recuperarPersonaje(maguin.getId());
         log.info("✌️ >>> Segunda Lectura...");
@@ -113,11 +124,8 @@ class InventarioServiceTest {
     }
 
     @Test
-    void crearPersonajeSuperLooteado() throws IOException {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(applicationContext.getBean(DataSource.class));
-        var resource = new ClassPathResource("personajePesado.sql");
-        String sql = new String(resource.getInputStream().readAllBytes());
-        jdbcTemplate.execute(sql);
+    void recuperarVariasVecesDesdeUnaMismaSesionEnService() {
+        personajeService.recuperarPersonajeNVeces(maguin.getId(), 10);
     }
 
     @Test
