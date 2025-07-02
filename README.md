@@ -1,10 +1,10 @@
-# Ejemplo Spring - Arquitectura Hexagonal orientada al dominio
-
-Este proyecto es un ejemplo de aplicación Spring que utiliza una arquitectura hexagonal (ports & adapters) orientada al dominio.
+# Ejemplo Spring - Arquitectura Hexagonal
 
 ## Estructura del proyecto
 
-La estructura del proyecto está organizada por dominios, donde cada dominio contiene su propia implementación de los elementos de la arquitectura hexagonal:
+Este es un punto de discusion en como llevar adelante hexagonal. Muchos proyectos dividen por dominio, otros directamente por las distintas capas.
+Mi preferencia personal es dividir por dominio, asi que fui con eso, donde cada dominio contiene su propia implementación de los elementos de la arquitectura hexagonal. 
+
 
 ```
 src/main/java/ar/edu/unq/spring/
@@ -42,14 +42,6 @@ src/main/java/ar/edu/unq/spring/
             ├── dto/        # DTOs para la comunicación REST
             └── InventarioController.java
 ```
-
-## Beneficios de esta estructura
-
-1. **Organización centrada en el dominio**: Cada dominio de negocio (personaje, inventario, etc.) tiene su propia estructura completa.
-2. **Cohesión**: Todo lo relacionado con un dominio específico está agrupado, lo que facilita su comprensión y mantenimiento.
-3. **Aislamiento**: Los cambios en un dominio tienen menos probabilidades de afectar a otros dominios.
-4. **Escalabilidad**: Es más fácil añadir nuevos dominios o expandir los existentes.
-
 ## Cómo funciona
 
 - Los **puertos** definen las interfaces que el dominio expone (puertos de entrada) o necesita (puertos de salida).
