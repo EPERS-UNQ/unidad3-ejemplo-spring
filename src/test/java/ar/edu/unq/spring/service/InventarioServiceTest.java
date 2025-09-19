@@ -181,7 +181,7 @@ public class InventarioServiceTest {
         Item espada = new Item("Espada", 100);
         inventarioService.guardarItem(espada);
 
-        Item mismaEspada = inventarioService.getItem(espada.getId());
+        Item mismaEspada = inventarioService.getItem(espada.getId()).get();
         mismaEspada.setNombre("Espada Gastada");
         inventarioService.guardarItem(mismaEspada);
 

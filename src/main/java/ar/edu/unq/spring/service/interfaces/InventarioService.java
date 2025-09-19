@@ -3,9 +3,10 @@ package ar.edu.unq.spring.service.interfaces;
 import ar.edu.unq.spring.modelo.Item;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface InventarioService {
-    Item getItem(Long itemId);
+    Optional<Item> getItem(Long itemId);
     Collection<Item> allItems();
     Item heaviestItem();
     Item guardarItem(Item item);

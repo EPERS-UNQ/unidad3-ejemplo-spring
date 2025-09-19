@@ -5,6 +5,8 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.persistence.ItemDAO;
 import ar.edu.unq.spring.persistence.PersonajeDAO;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
+import ar.edu.unq.spring.service.interfaces.Randomizer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +19,16 @@ import java.util.Set;
 public class InventarioServiceImpl implements InventarioService {
     private final PersonajeDAO personajeDAO;
     private final ItemDAO itemDAO;
-    public InventarioServiceImpl(PersonajeDAO personajeDAO, ItemDAO itemDAO) {
+    private final Randomizer randomizer;
+    public InventarioServiceImpl(PersonajeDAO personajeDAO, ItemDAO itemDAO, @Qualifier("FakeRandomizer") Randomizer randomizer) {
         this.personajeDAO = personajeDAO;
         this.itemDAO = itemDAO;
+        this.randomizer = randomizer;
     }
 
     @Override
-    public Item getItem(Long itemId) {
-        return itemDAO.findById(itemId).orElseThrow(() -> new NoSuchElementException("Item not found with id: " + itemId));
+    public Optional<Item> getItem(Long itemId) {
+        return itemDAO.findById(itemId);
     }
 
     @Override
@@ -49,6 +53,11 @@ public class InventarioServiceImpl implements InventarioService {
 
         Item item = itemDAO.findById(itemId)
                 .orElseThrow(() -> new NoSuchElementException("Item not found with id: " + itemId));
+
+        var random = randomizer.getRandom();
+        if (random > 50) {
+            throw new RuntimeException("No es tu día pibe");
+        }
 
         personaje.recoger(item);
         personajeDAO.save(personaje);
