@@ -1,6 +1,7 @@
 package ar.edu.unq.spring.controller;
 
-import ar.edu.unq.spring.controller.dto.ItemDTO;
+import ar.edu.unq.spring.controller.dto.request.CrearItemRequest;
+import ar.edu.unq.spring.controller.dto.response.ItemResponse;
 import ar.edu.unq.spring.service.interfaces.InventarioService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,39 +17,39 @@ final public class InventarioControllerREST {
         this.inventarioService = inventarioService;
     }
 
-    @GetMapping("/all")
-    public Set<ItemDTO> allItems() {
+    @GetMapping
+    public Set<ItemResponse> obtenerTodosLosItems() {
         return inventarioService.allItems().stream()
-                .map(ItemDTO::desdeModelo)
+                .map(ItemResponse::desdeModelo)
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping("/itemMasPesado")
-    public ItemDTO heaviestItem() {
-        return ItemDTO.desdeModelo(inventarioService.heaviestItem());
+    @GetMapping("/mas-pesado")
+    public ItemResponse getItemMasPesado() {
+        return ItemResponse.desdeModelo(inventarioService.heaviestItem());
     }
 
-    @GetMapping("/masPesados/{peso}")
-    public Set<ItemDTO> getMasPesados(@PathVariable int peso) {
-        return inventarioService.getMasPesados(peso).stream()
-                .map(ItemDTO::desdeModelo)
+    @GetMapping("/mas-pesados")
+    public Set<ItemResponse> getItemsMasPesados(@RequestParam int pesoMinimo) {
+        return inventarioService.getMasPesados(pesoMinimo).stream()
+                .map(ItemResponse::desdeModelo)
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping("/itemsPersonajesDebiles/{vida}")
-    public Set<ItemDTO> getItemsPersonajesDebiles(@PathVariable int vida) {
-        return inventarioService.getItemsPersonajesDebiles(vida).stream()
-                .map(ItemDTO::desdeModelo)
+    @GetMapping("/personajes-debiles")
+    public Set<ItemResponse> getItemsDePersonajesDebiles(@RequestParam int vidaMaxima) {
+        return inventarioService.getItemsPersonajesDebiles(vidaMaxima).stream()
+                .map(ItemResponse::desdeModelo)
                 .collect(Collectors.toSet());
     }
 
     @PostMapping
-    public void guardarItem(@RequestBody ItemDTO item) {
-        inventarioService.guardarItem(item.aModelo());
+    public void crearItem(@RequestBody CrearItemRequest request) {
+        inventarioService.guardarItem(request.aModelo());
     }
 
-    @PutMapping("/personaje/{personajeId}/recoger/item/{itemId}")
-    public void recoger(@PathVariable Long personajeId, @PathVariable Long itemId) {
+    @PostMapping("/{itemId}/recoger/personaje/{personajeId}")
+    public void recogerItem(@PathVariable Long itemId, @PathVariable Long personajeId) {
         inventarioService.recoger(personajeId, itemId);
     }
 }
