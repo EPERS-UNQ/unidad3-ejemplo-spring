@@ -10,25 +10,13 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-@Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Personaje {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 500, unique = true)
     private String nombre;
     private int vida;
     private int pesoMaximo;
-
-    @OneToMany(
-            mappedBy = "owner",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
-    )
     private Set<Item> inventario = new HashSet<>();
 
     public Personaje(String nombre, int vida, int pesoMaximo) {

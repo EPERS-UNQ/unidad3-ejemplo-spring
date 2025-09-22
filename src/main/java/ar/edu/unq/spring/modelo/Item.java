@@ -7,26 +7,17 @@ import lombok.*;
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-
-@Entity
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String nombre;
-
     private int peso;
 
-    @ManyToOne
     private Personaje owner;
 
     public Item(String nombre, int peso) {
         this.nombre = nombre;
         this.peso = peso;
     }
-
 }
