@@ -1,6 +1,5 @@
 package ar.edu.unq.spring.modelo;
 
-import jakarta.persistence.*;
 import lombok.*;
 
 @ToString

@@ -1,7 +1,6 @@
 package ar.edu.unq.spring.modelo;
 
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
