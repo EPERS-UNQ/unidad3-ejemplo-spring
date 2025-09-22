@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
+		"name": "Unidad 3 - Ejemplo Spring API",
+		"description": "Colección de endpoints para la API de Inventario y Personajes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Inventario",
+			"item": [
+				{
+					"name": "Obtener todos los items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inventario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario"
+							]
+						},
+						"description": "Obtiene todos los items del inventario"
+					}
+				},
+				{
+					"name": "Obtener item más pesado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inventario/mas-pesado",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario",
+								"mas-pesado"
+							]
+						},
+						"description": "Obtiene el item más pesado del inventario"
+					}
+				},
+				{
+					"name": "Obtener items más pesados que X",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inventario/mas-pesados?pesoMinimo=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario",
+								"mas-pesados"
+							],
+							"query": [
+								{
+									"key": "pesoMinimo",
+									"value": "10",
+									"description": "Peso mínimo para filtrar items"
+								}
+							]
+						},
+						"description": "Obtiene todos los items que pesan más que el valor especificado"
+					}
+				},
+				{
+					"name": "Obtener items de personajes débiles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inventario/personajes-debiles?vidaMaxima=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario",
+								"personajes-debiles"
+							],
+							"query": [
+								{
+									"key": "vidaMaxima",
+									"value": "50",
+									"description": "Vida máxima para considerar un personaje como débil"
+								}
+							]
+						},
+						"description": "Obtiene items que pertenecen a personajes con vida menor o igual al valor especificado"
+					}
+				},
+				{
+					"name": "Crear nuevo item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Espada de Fuego\",\n  \"peso\": 15\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/inventario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario"
+							]
+						},
+						"description": "Crea un nuevo item en el inventario"
+					}
+				},
+				{
+					"name": "Recoger item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/inventario/1/recoger/personaje/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"inventario",
+								"1",
+								"recoger",
+								"personaje",
+								"1"
+							]
+						},
+						"description": "Hace que un personaje recoja un item específico. Cambiar los IDs en la URL según sea necesario."
+					}
+				}
+			],
+			"description": "Endpoints relacionados con el inventario de items"
+		},
+		{
+			"name": "Personajes",
+			"item": [
+				{
+					"name": "Obtener todos los personajes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/personajes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"personajes"
+							]
+						},
+						"description": "Obtiene todos los personajes con su información completa"
+					}
+				},
+				{
+					"name": "Obtener personaje por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/personajes/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"personajes",
+								"1"
+							]
+						},
+						"description": "Obtiene un personaje específico por su ID, incluyendo su inventario completo"
+					}
+				},
+				{
+					"name": "Crear nuevo personaje",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Magordito\",\n  \"vida\": 100,\n  \"pesoMaximo\": 50\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/personajes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"personajes"
+							]
+						},
+						"description": "Crea un nuevo personaje"
+					}
+				}
+			],
+			"description": "Endpoints relacionados con los personajes"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
