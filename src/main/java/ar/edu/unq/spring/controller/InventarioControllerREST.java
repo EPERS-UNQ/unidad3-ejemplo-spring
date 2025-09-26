@@ -52,4 +52,9 @@ final public class InventarioControllerREST {
     public void recogerItem(@PathVariable Long itemId, @PathVariable Long personajeId) {
         inventarioService.recoger(personajeId, itemId);
     }
+
+    @DeleteMapping("/{itemId}")
+    public void deleteItem(@PathVariable("itemId") Long itemId) {
+        inventarioService.deleteById(itemId);
+    }
 }

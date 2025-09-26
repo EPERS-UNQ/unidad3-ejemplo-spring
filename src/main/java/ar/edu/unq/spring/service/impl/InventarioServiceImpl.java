@@ -73,4 +73,9 @@ public class InventarioServiceImpl implements InventarioService {
     public void deleteItem(Item item) {
         itemDAO.delete(item);
     }
+
+    @Override
+    public void deleteById(Long itemId) {
+        itemDAO.deleteById(itemId);
+    }
 }

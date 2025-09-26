@@ -14,4 +14,5 @@ public interface InventarioService {
     Collection<Item> getItemsPersonajesDebiles(int vida);
     void clearAll();
     void deleteItem(Item item);
+    void deleteById(Long itemId);
 }
