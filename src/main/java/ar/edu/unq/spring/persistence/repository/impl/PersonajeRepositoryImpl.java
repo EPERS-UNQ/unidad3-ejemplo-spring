@@ -4,6 +4,7 @@ import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.persistence.repository.jpa.PersonajeDAO;
 import ar.edu.unq.spring.persistence.dto.PersonajeJPADTO;
 import ar.edu.unq.spring.persistence.repository.PersonajeRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,27 +15,27 @@ import java.util.stream.Collectors;
 public class PersonajeRepositoryImpl implements PersonajeRepository {
 
     private final PersonajeDAO personajeDAO;
+    private final ModelMapper modelMapper;
 
-    public PersonajeRepositoryImpl(PersonajeDAO personajeDAO) {
+    public PersonajeRepositoryImpl(PersonajeDAO personajeDAO,
+                                   ModelMapper modelMapper) {
         this.personajeDAO = personajeDAO;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     public List<Personaje> findAll() {
-        return personajeDAO.findAll().stream()
-                .map(PersonajeJPADTO::aModelo)
-                .collect(Collectors.toList());
+        return personajeDAO.findAll().stream().map((element) -> modelMapper.map(element, Personaje.class)).collect(Collectors.toList());
     }
 
     @Override
     public Optional<Personaje> findById(Long id) {
-        return personajeDAO.findById(id)
-                .map(PersonajeJPADTO::aModelo);
+        return personajeDAO.findById(id).map((element) -> modelMapper.map(element, Personaje.class));
     }
 
     @Override
     public Personaje save(Personaje personaje) {
-        PersonajeJPADTO dto = PersonajeJPADTO.desdeModelo(personaje);
+        PersonajeJPADTO dto = modelMapper.map(personaje, PersonajeJPADTO.class);
         PersonajeJPADTO savedDTO = personajeDAO.save(dto);
         personaje.setId(savedDTO.getId());
         return personaje;
