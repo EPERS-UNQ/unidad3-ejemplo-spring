@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping
+          https://dozermapper.github.io/schema/bean-mapping.xsd">
+
+    <configuration>
+        <relationship-type>non-cumulative</relationship-type>
+    </configuration>
+
+    <mapping>
+        <class-a>ar.edu.unq.spring.modelo.Guerrero</class-a>
+        <class-b>ar.edu.unq.spring.persistence.dto.GuerreroJPADTO</class-b>
+        <field relationship-type="non-cumulative">
+            <a>inventario</a>
+            <b>inventario</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>ar.edu.unq.spring.modelo.Mago</class-a>
+        <class-b>ar.edu.unq.spring.persistence.dto.MagoJPADTO</class-b>
+        <field relationship-type="non-cumulative">
+            <a>inventario</a>
+            <b>inventario</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>ar.edu.unq.spring.modelo.Item</class-a>
+        <class-b>ar.edu.unq.spring.persistence.dto.ItemJPADTO</class-b>
+        <field relationship-type="non-cumulative">
+            <a>owner</a>
+            <b>owner</b>
+        </field>
+    </mapping>
+
+</mappings>
+

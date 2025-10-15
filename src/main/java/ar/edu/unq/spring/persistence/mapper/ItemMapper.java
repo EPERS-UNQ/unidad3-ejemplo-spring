@@ -2,17 +2,24 @@ package ar.edu.unq.spring.persistence.mapper;
 
 import ar.edu.unq.spring.modelo.Item;
 import ar.edu.unq.spring.persistence.dto.ItemJPADTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.github.dozermapper.core.Mapper;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring")
-public interface ItemMapper {
+@Component
+public class ItemMapper {
 
-    // Ignorar owner para evitar circularidad con PersonajeMapper
-    @Mapping(target = "owner", ignore = true)
-    ItemJPADTO toDTO(Item item);
+    private final Mapper dozerMapper;
 
-    @Mapping(target = "owner", ignore = true)
-    Item toEntity(ItemJPADTO dto);
+    public ItemMapper(Mapper dozerMapper) {
+        this.dozerMapper = dozerMapper;
+    }
+
+    public ItemJPADTO toDTO(Item item) {
+        return dozerMapper.map(item, ItemJPADTO.class);
+    }
+
+    public Item toEntity(ItemJPADTO dto) {
+        return dozerMapper.map(dto, Item.class);
+    }
 }
 

@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Item {
 
     private Long id;
