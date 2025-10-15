@@ -2,6 +2,9 @@ package ar.edu.unq.spring.modelo;
 
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @ToString
 @Setter
 @Getter
@@ -13,7 +16,7 @@ public class Item {
     private String nombre;
     private int peso;
 
-    private Personaje owner;
+    private Set<Personaje> owners = new HashSet<>();
 
     public Item(String nombre, int peso) {
         this.nombre = nombre;

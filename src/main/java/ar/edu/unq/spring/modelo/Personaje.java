@@ -39,7 +39,7 @@ public abstract class Personaje {
             throw new MuchoPesoException(this, item);
         }
         this.inventario.add(item);
-        item.setOwner(this);
+        item.getOwners().add(this);
     }
 
 }

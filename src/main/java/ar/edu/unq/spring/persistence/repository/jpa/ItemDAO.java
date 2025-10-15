@@ -1,6 +1,6 @@
 package ar.edu.unq.spring.persistence.repository.jpa;
 
-import ar.edu.unq.spring.persistence.dto.ItemJPADTO;
+import ar.edu.unq.spring.modelo.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,19 +9,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Set;
 
 @Repository
-public interface ItemDAO extends JpaRepository<ItemJPADTO, Long> {
+public interface ItemDAO extends JpaRepository<Item, Long> {
 
-    ItemJPADTO findTopByOrderByPesoDesc();
+    Item findTopByOrderByPesoDesc();
 
     @Query(
-            "FROM ItemJPADTO i where i.peso  > :peso order by i.peso asc"
+            "FROM Item i where i.peso  > :peso order by i.peso asc"
     )
-    Set<ItemJPADTO> getMasPesados(@Param("peso") int peso);
+    Set<Item> getMasPesados(@Param("peso") int peso);
 
     @Query(
-            "from ItemJPADTO i "
-                    + "where i.owner.vida < ?1 "
+            "from Item i "
                     + "order by i.peso asc"
     )
-    Set<ItemJPADTO> getItemsDePersonajesDebiles(int vida);
+    Set<Item> getItemsDePersonajesDebiles(int vida);
 }

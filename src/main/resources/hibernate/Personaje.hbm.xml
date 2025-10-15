@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="ar.edu.unq.spring.modelo">
+
+    <class name="Personaje" table="personaje" abstract="true">
+        
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+
+        <!-- Discriminador para distinguir subclases -->
+        <discriminator column="dtype" type="string"/>
+
+        <property name="nombre" column="nombre" not-null="true" unique="true" length="500"/>
+        <property name="vida" column="vida" not-null="true"/>
+        <property name="pesoMaximo" column="peso_maximo" not-null="true"/>
+
+        <set name="inventario" table="personaje_item" cascade="all" fetch="join" lazy="false">
+            <key column="personaje_id"/>
+            <many-to-many class="Item" column="item_id"/>
+        </set>
+
+        <!-- Subclases -->
+        <subclass name="Guerrero" discriminator-value="GuerreroJPADTO">
+            <property name="fuerza" column="fuerza"/>
+        </subclass>
+
+        <subclass name="Mago" discriminator-value="MagoJPADTO">
+            <property name="mana" column="mana"/>
+        </subclass>
+
+    </class>
+
+</hibernate-mapping>
+
