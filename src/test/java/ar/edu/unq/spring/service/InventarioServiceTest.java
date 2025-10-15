@@ -1,6 +1,8 @@
 package ar.edu.unq.spring.service;
 
+import ar.edu.unq.spring.modelo.Guerrero;
 import ar.edu.unq.spring.modelo.Item;
+import ar.edu.unq.spring.modelo.Mago;
 import ar.edu.unq.spring.modelo.Personaje;
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
 import ar.edu.unq.spring.modelo.exception.NombreDePersonajeRepetido;
@@ -34,8 +36,8 @@ public class InventarioServiceTest {
         tunica = new Item("Tunica", 100);
         baculo = new Item("Baculo", 50);
 
-        maguin = new Personaje("Maguin", 10, 70);
-        debilucho = new Personaje("Debilucho", 1, 1000);
+        maguin = new Mago("Maguin", 10, 70, 100);
+        debilucho = new Guerrero("Debilucho", 1, 1000, 1);
 
         inventarioService.guardarItem(tunica);
         inventarioService.guardarItem(baculo);
@@ -102,7 +104,7 @@ public class InventarioServiceTest {
 
     @Test
     public void testNombreDePersonajeTieneQueSerUnico() {
-        Personaje otroMaguin = new Personaje("Maguin", 10, 70);
+        Personaje otroMaguin = new Mago("Maguin", 10, 70, 10);
 
         NombreDePersonajeRepetido exception = Assertions.assertThrows(NombreDePersonajeRepetido.class, () -> {
             personajeService.guardarPersonaje(otroMaguin);

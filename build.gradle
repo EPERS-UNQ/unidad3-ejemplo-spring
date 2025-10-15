@@ -21,12 +21,20 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
-    implementation 'org.modelmapper:modelmapper:3.2.4'
+    
+    // MapStruct - mejor que ModelMapper para casos con herencia
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    
+    // IMPORTANTE: MapStruct debe procesarse DESPUÉS de Lombok
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+    testAnnotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 tasks.test {
     useJUnitPlatform()

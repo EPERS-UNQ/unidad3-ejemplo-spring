@@ -1,13 +1,15 @@
 package ar.edu.unq.spring.persistence.dto;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @ToString
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 @Entity
 public class ItemJPADTO {

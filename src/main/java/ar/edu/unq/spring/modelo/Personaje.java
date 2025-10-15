@@ -1,7 +1,9 @@
 package ar.edu.unq.spring.modelo;
 
 import ar.edu.unq.spring.modelo.exception.MuchoPesoException;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,14 +11,17 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Personaje {
+public abstract class Personaje {
 
     private Long id;
     private String nombre;
     private int vida;
     private int pesoMaximo;
     private Set<Item> inventario = new HashSet<>();
+
+
+    public Personaje() {
+    }
 
     public Personaje(String nombre, int vida, int pesoMaximo) {
         this.nombre = nombre;

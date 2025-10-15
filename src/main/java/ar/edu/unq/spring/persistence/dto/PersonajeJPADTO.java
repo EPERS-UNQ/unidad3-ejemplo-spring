@@ -9,10 +9,9 @@ import java.util.Set;
 @Setter
 @Getter
 @ToString
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 @Entity
-public class PersonajeJPADTO {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public abstract class PersonajeJPADTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +29,5 @@ public class PersonajeJPADTO {
     )
     private Set<ItemJPADTO> inventario = new HashSet<>();
 
-
+    public PersonajeJPADTO() {}
 }
