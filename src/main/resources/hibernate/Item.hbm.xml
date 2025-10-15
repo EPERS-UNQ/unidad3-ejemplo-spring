@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="ar.edu.unq.spring.modelo">
+
+    <class name="Item" table="item">
+
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+
+        <property name="nombre" column="nombre" not-null="true"/>
+        <property name="peso" column="peso" not-null="true"/>
+
+        <set name="owners" table="personaje_item" inverse="true" fetch="join" lazy="false">
+            <key column="item_id"/>
+            <many-to-many class="Personaje" column="personaje_id"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>
+

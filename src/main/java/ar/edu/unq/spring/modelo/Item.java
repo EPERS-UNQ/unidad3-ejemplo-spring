@@ -2,18 +2,21 @@ package ar.edu.unq.spring.modelo;
 
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @ToString
 @Setter
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Item {
 
     private Long id;
     private String nombre;
     private int peso;
 
-    private Personaje owner;
+    private Set<Personaje> owners = new HashSet<>();
 
     public Item(String nombre, int peso) {
         this.nombre = nombre;
