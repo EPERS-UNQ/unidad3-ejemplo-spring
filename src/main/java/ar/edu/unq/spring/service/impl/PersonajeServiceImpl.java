@@ -40,6 +40,13 @@ public class PersonajeServiceImpl implements PersonajeService {
     }
 
     @Override
+    public int longitudInventario(Long personajeId) {
+        // Es mejor resolverlo con un COUNT en la DB, lo hacemos así para fines prácticos...
+        Personaje personaje = personajeDAO.findById(personajeId).orElseThrow(() -> new NoSuchElementException("Personaje not found with id: " + personajeId));
+        return personaje.getInventario().size();
+    }
+
+    @Override
     public void recuperarPersonajeNVeces(Long personajeId, Integer veces) {
         for (int i = 0; i < veces; i++) {
             personajeDAO.findById(personajeId);

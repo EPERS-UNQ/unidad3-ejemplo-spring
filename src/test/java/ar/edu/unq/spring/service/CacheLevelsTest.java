@@ -33,7 +33,7 @@ public class CacheLevelsTest {
         personajeService.guardarPersonaje(personaje);
 
         System.out.println("===================================================================");
-        System.out.println("=--- Acá va arranca el test");
+        System.out.println("=--- ACÁ ARRANCA EL TEST");
         System.out.println("===================================================================");
     }
 
@@ -47,7 +47,7 @@ public class CacheLevelsTest {
     @Test
     public void readingWithMultipleTransactions() {
         for (int i = 0; i < 10; i++) {
-            personajeService.recuperarPersonaje(personaje.getId());;
+            personajeService.recuperarPersonaje(personaje.getId());
         }
     }
 
@@ -56,8 +56,19 @@ public class CacheLevelsTest {
         personajeService.recuperarPersonajeNVeces(personaje.getId(), 10);
     }
 
+    // Test aparte para probar como se comporta cache L2 con las relaciones:
+    @Test
+    public void readingRelationsWithMultipleTransactions() {
+        for (int i = 0; i < 10; i++) {
+            personajeService.longitudInventario(personaje.getId());
+        }
+    }
+
     @AfterEach
     public void tearDown() {
+        System.out.println("===================================================================");
+        System.out.println("=--- ACÁ ARRANCA EL TEARDOWN");
+        System.out.println("===================================================================");
         personajeService.clearAll();
     }
 }

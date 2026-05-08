@@ -29,9 +29,9 @@ public class Personaje {
     @OneToMany(
             mappedBy = "owner",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
-    @org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
+    // @org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
     private Set<Item> inventario = new HashSet<>();
 
     public Personaje(String nombre, int vida, int pesoMaximo) {

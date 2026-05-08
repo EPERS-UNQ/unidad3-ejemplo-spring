@@ -8,6 +8,7 @@ public interface PersonajeService {
     Set<Personaje> allPersonajes();
     void guardarPersonaje(Personaje personaje);
     Personaje recuperarPersonaje(Long personajeId);
+    int longitudInventario(Long personajeId);
     void recuperarPersonajeNVeces(Long personajeId, Integer veces);
     void clearAll();
 }
