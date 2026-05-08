@@ -133,9 +133,7 @@ class InventarioServiceTest {
         Random random = new Random();
         generarEPERs();
         for (int i = 1; i <= 200000; i++) {
-            Personaje unMago = new Personaje("NPC-" + i);
-            unMago.setPesoMaximo(random.nextInt(200, 300));
-            unMago.setVida(random.nextInt(50, 200));
+            Personaje unMago = new Personaje("PJ_" + i, random.nextInt(200, 300), random.nextInt(50, 200));
             personajeService.guardarPersonaje(unMago);
         }
     }
@@ -150,32 +148,41 @@ class InventarioServiceTest {
     }
 
     private void generarEPERs() {
-        Random random = new Random();
+        Personaje mago = new Personaje("Tobi", 250, 100);
+        personajeService.guardarPersonaje(mago);
 
-        Personaje unNigromante = new Personaje("Iancho");
-        unNigromante.setPesoMaximo(random.nextInt(200, 300));
-        unNigromante.setVida(random.nextInt(50, 200));
-        personajeService.guardarPersonaje(unNigromante);
+        Personaje bardo = new Personaje("Pancho", 220, 150);
+        personajeService.guardarPersonaje(bardo);
 
-        Personaje unBardo = new Personaje("Fran");
-        unBardo.setPesoMaximo(random.nextInt(200, 300));
-        unBardo.setVida(random.nextInt(50, 200));
-        personajeService.guardarPersonaje(unBardo);
+        Personaje malevo = new Personaje("Valen", 280, 120);
+        personajeService.guardarPersonaje(malevo);
 
-        Personaje unPaladin = new Personaje("Fabi");
-        unPaladin.setPesoMaximo(random.nextInt(50, 125));
-        unPaladin.setVida(random.nextInt(100, 150));
-        personajeService.guardarPersonaje(unPaladin);
+        Personaje druida = new Personaje("Tom", 80, 130);
+        personajeService.guardarPersonaje(druida);
 
-        Personaje unBarbarian = new Personaje("Luki");
-        unBarbarian.setPesoMaximo(random.nextInt(50, 125));
-        unBarbarian.setVida(random.nextInt(100, 150));
-        personajeService.guardarPersonaje(unBarbarian);
+        Personaje picaro = new Personaje("Pablito", 70, 140);
+        personajeService.guardarPersonaje(picaro);
 
-        Personaje elReyDeLosBandidos = new Personaje("Valentin");
-        elReyDeLosBandidos.setPesoMaximo(random.nextInt(50, 125));
-        elReyDeLosBandidos.setVida(random.nextInt(100, 150));
-        personajeService.guardarPersonaje(elReyDeLosBandidos);
+        Personaje clerigo = new Personaje("Emi", 240, 180);
+        personajeService.guardarPersonaje(clerigo);
+
+        Personaje hechicera = new Personaje("Lu", 260, 90);
+        personajeService.guardarPersonaje(hechicera);
+
+        Personaje maga = new Personaje("Ale", 100, 145);
+        personajeService.guardarPersonaje(maga);
+
+        Personaje templario = new Personaje("Mate", 110, 135);
+        personajeService.guardarPersonaje(templario);
+
+        Personaje arquera = new Personaje("Jose", 90, 125);
+        personajeService.guardarPersonaje(arquera);
+
+        Personaje cazadorDeDragones = new Personaje("Lolo", 120, 150);
+        personajeService.guardarPersonaje(cazadorDeDragones);
+
+        Personaje paladin = new Personaje("Fabi", 115, 140);
+        personajeService.guardarPersonaje(paladin);
     }
 
     @AfterEach

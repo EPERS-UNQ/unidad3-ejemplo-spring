@@ -32,6 +32,12 @@ public class Personaje {
         this.nombre = nombre;
     }
 
+    public Personaje(String nombre, int pesoMaximo, int vida) {
+        this.nombre = nombre;
+        this.pesoMaximo = pesoMaximo;
+        this.vida = vida;
+    }
+
     public int getPesoActual() {
         return inventario.stream().mapToInt(Item::getPeso).sum();
     }
