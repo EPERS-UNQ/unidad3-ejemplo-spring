@@ -40,6 +40,13 @@ public class PersonajeServiceImpl implements PersonajeService {
     }
 
     @Override
+    public void recuperarPersonajeNVeces(Long personajeId, Integer veces) {
+        for (int i = 0; i < veces; i++) {
+            personajeDAO.findById(personajeId);
+        }
+    }
+
+    @Override
     public void clearAll() {
         personajeDAO.deleteAll();
     }

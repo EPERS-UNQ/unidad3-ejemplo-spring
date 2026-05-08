@@ -13,6 +13,8 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 @Entity
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 public class Personaje {
 
     @Id
@@ -29,6 +31,7 @@ public class Personaje {
             cascade = CascadeType.ALL,
             fetch = FetchType.EAGER
     )
+    @org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
     private Set<Item> inventario = new HashSet<>();
 
     public Personaje(String nombre, int vida, int pesoMaximo) {
