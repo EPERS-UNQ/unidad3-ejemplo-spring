@@ -172,7 +172,6 @@
 							],
 							"port": "8080",
 							"path": [
-								"api",
 								"personajes"
 							]
 						},
@@ -192,7 +191,6 @@
 							],
 							"port": "8080",
 							"path": [
-								"api",
 								"personajes",
 								"1"
 							]
@@ -222,7 +220,6 @@
 							],
 							"port": "8080",
 							"path": [
-								"api",
 								"personajes"
 							]
 						},
